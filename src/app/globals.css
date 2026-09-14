@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper: var(--paper);
+  --color-paper-dim: var(--paper-dim);
+  --color-acid: var(--acid);
+  --color-acid-dim: var(--acid-dim);
+  --color-blaze: var(--blaze);
+  --color-line: var(--line);
+  --font-display: var(--font-anton);
+  --font-body: var(--font-archivo);
+}
+
+:root {
+  --ink: #0b0b0c;
+  --ink-soft: #17171a;
+  --paper: #f4f2ea;
+  --paper-dim: #c9c6ba;
+  --acid: #d7ff3b;
+  --acid-dim: #a8cc1f;
+  --blaze: #ff5a1f;
+  --line: #2c2c30;
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(215, 255, 59, 0.08), transparent 45%),
+    radial-gradient(circle at 100% 30%, rgba(255, 90, 31, 0.07), transparent 40%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--acid);
+  color: var(--ink);
+}
+
+.font-display {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Subtle grain overlay used behind hero / section headers for texture */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.diagonal-edge {
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+}
+
+.diagonal-edge-reverse {
+  clip-path: polygon(0 12%, 100% 0, 100% 100%, 0 100%);
+}
+
+.text-outline {
+  -webkit-text-stroke: 1.5px var(--paper);
+  color: transparent;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 22s linear infinite;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.card-tilt {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+
+.card-tilt:hover {
+  transform: translateY(-6px) rotate(-0.4deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-rise,
+  .card-tilt {
+    animation: none !important;
+    transition: none !important;
+  }
+}
