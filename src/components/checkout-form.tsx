@@ -180,7 +180,7 @@ export default function CheckoutForm() {
         <button
           type="submit"
           disabled={submitting || items.length === 0}
-          className="rounded-full bg-acid px-8 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+          className="cursor-pointer rounded-full bg-acid px-8 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Confirmar pedido
         </button>

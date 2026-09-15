@@ -62,7 +62,7 @@ export default function Header() {
             aria-label="Abrir menú"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-paper lg:hidden"
+            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-line text-paper lg:hidden"
           >
             <span className="sr-only">Menú</span>
             {menuOpen ? "✕" : "☰"}
