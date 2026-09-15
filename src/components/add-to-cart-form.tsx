@@ -46,7 +46,7 @@ export default function AddToCartForm({ product }: { product: Product }) {
                 type="button"
                 onClick={() => setVariantId(v.id)}
                 aria-pressed={variantId === v.id}
-                className={`min-w-11 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
+                className={`min-w-11 cursor-pointer rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
                   variantId === v.id
                     ? "border-acid bg-acid text-ink"
                     : "border-line bg-ink-soft text-paper hover:border-paper-dim"
@@ -68,7 +68,7 @@ export default function AddToCartForm({ product }: { product: Product }) {
             type="button"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             aria-label="Restar cantidad"
-            className="flex h-10 w-10 items-center justify-center text-lg text-paper transition-colors hover:text-acid"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center text-lg text-paper transition-colors hover:text-acid"
           >
             −
           </button>
@@ -82,7 +82,7 @@ export default function AddToCartForm({ product }: { product: Product }) {
             }
             disabled={quantity >= MAX_LINE_QUANTITY}
             aria-label="Sumar cantidad"
-            className="flex h-10 w-10 items-center justify-center text-lg text-paper transition-colors hover:text-acid disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-paper"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center text-lg text-paper transition-colors hover:text-acid disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-paper"
           >
             +
           </button>
@@ -93,7 +93,7 @@ export default function AddToCartForm({ product }: { product: Product }) {
         <button
           type="button"
           onClick={handleAdd}
-          className="rounded-full bg-acid px-8 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(215,255,59,0.6)]"
+          className="cursor-pointer rounded-full bg-acid px-8 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(255,45,140,0.6)]"
         >
           Agregar al carrito
         </button>

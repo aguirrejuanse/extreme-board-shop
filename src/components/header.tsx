@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { categories } from "@/data/categories";
@@ -21,12 +22,17 @@ export default function Header() {
       </div>
 
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <Link href="/" className="group flex items-baseline gap-2" onClick={() => setMenuOpen(false)}>
+        <Link href="/" className="group flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+          <Image
+            src="/logo.jpg"
+            alt="Extreme Board Shop"
+            width={44}
+            height={44}
+            priority
+            className="rounded-full"
+          />
           <span className="font-display text-2xl leading-none tracking-tight text-paper sm:text-3xl">
-            EXTREME
-          </span>
-          <span className="font-display text-2xl leading-none tracking-tight text-acid sm:text-3xl">
-            BOARD SHOP
+            EXTREME <span className="text-acid">BOARD SHOP</span>
           </span>
         </Link>
 
@@ -62,7 +68,7 @@ export default function Header() {
             aria-label="Abrir menú"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-paper lg:hidden"
+            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-line text-paper lg:hidden"
           >
             <span className="sr-only">Menú</span>
             {menuOpen ? "✕" : "☰"}
