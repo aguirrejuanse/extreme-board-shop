@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FREE_SHIPPING_THRESHOLD } from "@/lib/payments";
+import { WHATSAPP } from "@/data/stores";
 import { formatPrice } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -126,12 +127,14 @@ export default function AyudaPage() {
           <p className="mt-4 text-sm leading-relaxed text-paper-dim">
             Si te arrepentís de tu compra, tenés hasta 10 días corridos desde
             que recibiste el producto para cancelarla y recibir el reintegro
-            total, sin costo ni trámites extra. Escribinos a{" "}
+            total, sin costo ni trámites extra. Escribinos por{" "}
             <a
-              href="mailto:ventaonline@extremeboardshop.com.ar"
+              href={`https://wa.me/${WHATSAPP}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-paper underline decoration-acid decoration-2 underline-offset-4"
             >
-              ventaonline@extremeboardshop.com.ar
+              WhatsApp
             </a>{" "}
             con tu número de orden. Es tu derecho por la Ley 24.240 de Defensa
             del Consumidor.

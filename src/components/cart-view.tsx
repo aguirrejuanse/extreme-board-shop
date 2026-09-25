@@ -124,7 +124,7 @@ export default function CartView() {
                       )
                     }
                     disabled={line.quantity <= 1}
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center text-paper transition-colors hover:text-acid disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-paper"
+                    className="flex h-11 w-11 cursor-pointer items-center justify-center text-paper transition-colors hover:text-acid disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-paper"
                   >
                     −
                   </button>
@@ -138,7 +138,7 @@ export default function CartView() {
                       setQuantity(line.productId, line.quantity + 1, line.variantId)
                     }
                     disabled={line.quantity >= MAX_LINE_QUANTITY}
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center text-paper transition-colors hover:text-acid disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-paper"
+                    className="flex h-11 w-11 cursor-pointer items-center justify-center text-paper transition-colors hover:text-acid disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-paper"
                   >
                     +
                   </button>

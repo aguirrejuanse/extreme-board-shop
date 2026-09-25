@@ -18,3 +18,8 @@ Next.js 15 (App Router) storefront with Tailwind CSS 4. Spanish (es-AR) UI copy.
 
 - Default branch: `main`. Open PRs against `main` from a feature branch, never commit to `main` directly.
 - Conventional commits.
+
+## Site URL
+
+- `src/lib/site.ts` defaults to `https://extreme-board-shop.vercel.app` for this demo. `NEXT_PUBLIC_SITE_URL` can override the origin at build time; use a full URL including `https://` and rebuild after changing it.
+- Canonical, Open Graph, sitemap, robots and JSON-LD URLs share this origin. Do not point the demo at the official store domain before an actual domain migration.
