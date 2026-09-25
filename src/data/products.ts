@@ -395,6 +395,34 @@ export function getProductsByBrand(brand: string): Product[] {
   return products.filter((product) => product.brand === brand);
 }
 
+/**
+ * Representative photo for each brand landing + /marcas card. Most reuse
+ * that brand's product shot (guaranteed on-brand); surf brands get a
+ * dedicated lifestyle photo in /images/brands.
+ */
+const BRAND_IMAGES: Record<string, string> = {
+  Element: "/images/products/element-section-completa-8-0.webp",
+  "Santa Cruz": "/images/products/santa-cruz-classic-dot-completa-8-25.webp",
+  Independent: "/images/products/independent-stage-11-trucks.webp",
+  Spitfire: "/images/products/spitfire-formula-four-52mm.webp",
+  Bones: "/images/products/bones-reds-rodamientos.webp",
+  "Mob Grip": "/images/products/mob-grip-tape.webp",
+  Burton: "/images/products/burton-custom-flying-v-158.webp",
+  ThirtyTwo: "/images/products/thirtytwo-lashed-botas.webp",
+  Anon: "/images/products/anon-m4-goggles.webp",
+  Volcom: "/images/products/volcom-hydro-puff-jacket.webp",
+  Quiksilver: "/images/brands/quiksilver.webp",
+  Roxy: "/images/brands/roxy.webp",
+  Vans: "/images/products/vans-old-skool.webp",
+  Converse: "/images/products/converse-chuck-70.webp",
+  "DC Shoes": "/images/products/dc-court-graffik.webp",
+  VonZipper: "/images/products/vonzipper-anteojos-sol.webp",
+};
+
+export function getBrandImage(brand: string): string {
+  return BRAND_IMAGES[brand] ?? getProductsByBrand(brand)[0]?.image ?? "";
+}
+
 export function getSaleProducts(): Product[] {
   return products
     .filter((product) => product.compareAtPrice !== undefined)

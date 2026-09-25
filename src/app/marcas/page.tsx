@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { brandSlug, getAllBrands, getProductsByBrand } from "@/data/products";
+import {
+  brandSlug,
+  getAllBrands,
+  getBrandImage,
+  getProductsByBrand,
+} from "@/data/products";
 
 export const metadata: Metadata = {
   title: "Marcas",
@@ -43,14 +49,24 @@ export default function BrandsPage() {
             <li key={brand}>
               <Link
                 href={`/marcas/${brandSlug(brand)}`}
-                className="card-tilt flex h-full flex-col justify-between gap-6 rounded-2xl border border-line bg-ink-soft p-5 transition-colors hover:border-acid"
+                className="card-tilt group relative flex aspect-square flex-col justify-end overflow-hidden rounded-2xl border border-line"
               >
-                <span className="font-display text-2xl tracking-tight text-paper">
-                  {brand}
-                </span>
-                <span className="text-xs text-paper-dim">
-                  {count} {count === 1 ? "producto" : "productos"}
-                </span>
+                <Image
+                  src={getBrandImage(brand)}
+                  alt={brand}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent transition-opacity group-hover:from-ink/95" />
+                <div className="relative flex flex-col gap-1 p-5">
+                  <span className="font-display text-2xl tracking-tight text-paper">
+                    {brand}
+                  </span>
+                  <span className="text-xs text-paper-dim">
+                    {count} {count === 1 ? "producto" : "productos"}
+                  </span>
+                </div>
               </Link>
             </li>
           );

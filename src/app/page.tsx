@@ -1,10 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { categories } from "@/data/categories";
 import { getFeaturedProducts, getAllBrands } from "@/data/products";
+import { PHONE, stores } from "@/data/stores";
 import CategoryCard from "@/components/category-card";
 import ProductCard from "@/components/product-card";
+import HeroCarousel from "@/components/hero-carousel";
 
 import { SITE_URL } from "@/lib/site";
 
@@ -19,9 +20,9 @@ export const metadata: Metadata = {
 
 const brands = getAllBrands();
 
-// Local SEO: one SportingGoodsStore node per physical location so both
-// Mendoza and San Juan are eligible for local pack / "cerca de mí" results,
-// grouped under the same parent Organization.
+// Local SEO: one SportingGoodsStore node per physical location so every
+// branch is eligible for local pack / "cerca de mí" results, grouped
+// under the same parent Organization.
 const storesJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -32,56 +33,20 @@ const storesJsonLd = {
       url: SITE_URL,
       logo: `${SITE_URL}/logo.jpg`,
     },
-    {
+    ...stores.map((store) => ({
       "@type": "SportingGoodsStore",
       parentOrganization: { "@id": `${SITE_URL}/#org` },
-      name: "Extreme Board Shop — Mendoza",
+      name: `Extreme Board Shop — ${store.name}`,
+      telephone: PHONE,
       address: {
         "@type": "PostalAddress",
-        streetAddress: "Av. San Martín 1234",
-        addressLocality: "Mendoza",
-        addressRegion: "Mendoza",
+        streetAddress: store.address,
+        addressLocality: store.city,
+        addressRegion: store.city,
         addressCountry: "AR",
       },
-      openingHoursSpecification: {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ],
-        opens: "10:00",
-        closes: "20:00",
-      },
-    },
-    {
-      "@type": "SportingGoodsStore",
-      parentOrganization: { "@id": `${SITE_URL}/#org` },
-      name: "Extreme Board Shop — San Juan",
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: "Av. Libertador 890",
-        addressLocality: "San Juan",
-        addressRegion: "San Juan",
-        addressCountry: "AR",
-      },
-      openingHoursSpecification: {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ],
-        opens: "10:00",
-        closes: "20:00",
-      },
-    },
+      openingHours: store.hoursSchema,
+    })),
   ],
 };
 
@@ -97,12 +62,12 @@ export default function HomePage() {
       {/* HERO */}
       <section className="grain diagonal-edge relative overflow-hidden bg-ink-soft pb-24">
         <div className="pointer-events-none absolute inset-0 opacity-25">
-          <Image
-            src="/images/hero.webp"
-            alt=""
-            fill
-            priority
-            className="object-cover"
+          <HeroCarousel
+            images={[
+              "/images/hero.webp",
+              "/images/hero-skate.webp",
+              "/images/hero-snow.webp",
+            ]}
           />
         </div>
 

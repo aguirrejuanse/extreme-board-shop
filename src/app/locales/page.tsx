@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_URL } from "@/lib/site";
+import { PHONE, WHATSAPP, stores, type Store } from "@/data/stores";
 
 export const metadata: Metadata = {
   title: "Locales en Mendoza y San Juan",
@@ -11,41 +12,13 @@ export const metadata: Metadata = {
   },
 };
 
-interface Store {
-  name: string;
-  city: string;
-  address: string;
-  hours: string;
-  phone: string;
-  whatsapp: string;
-}
-
-const stores: Store[] = [
-  {
-    name: "Extreme Board Shop — Mendoza Ciudad",
-    city: "Mendoza",
-    address: "Av. San Martín 1234, Ciudad",
-    hours: "Lunes a sábado, 10 a 20 hs",
-    phone: "+54 261 555-0123",
-    whatsapp: "5492615550123",
-  },
-  {
-    name: "Extreme Board Shop — San Juan Capital",
-    city: "San Juan",
-    address: "Av. Libertador 890, Capital",
-    hours: "Lunes a sábado, 10 a 20 hs",
-    phone: "+54 264 555-0890",
-    whatsapp: "5492645550890",
-  },
-];
-
 const storesJsonLd = {
   "@context": "https://schema.org",
   "@graph": stores.map((store) => ({
     "@type": "SportingGoodsStore",
-    name: store.name,
+    name: `Extreme Board Shop — ${store.name}`,
     url: `${SITE_URL}/locales`,
-    telephone: store.phone,
+    telephone: PHONE,
     address: {
       "@type": "PostalAddress",
       streetAddress: store.address,
@@ -53,19 +26,7 @@ const storesJsonLd = {
       addressRegion: store.city,
       addressCountry: "AR",
     },
-    openingHoursSpecification: {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ],
-      opens: "10:00",
-      closes: "20:00",
-    },
+    openingHours: store.hoursSchema,
   })),
 };
 
@@ -104,55 +65,70 @@ export default function LocalesPage() {
         </p>
       </header>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {stores.map((store) => (
-          <article
-            key={store.name}
-            className="flex flex-col rounded-2xl border border-line bg-ink-soft p-6"
-          >
-            <p className="text-xs font-bold tracking-[0.2em] text-acid uppercase">
-              {store.city}
-            </p>
-            <h2 className="mt-2 font-display text-2xl tracking-tight text-paper">
-              {store.name}
-            </h2>
+      {(["Mendoza", "San Juan"] as const).map((province) => (
+        <section key={province} className="mb-12">
+          <h2 className="mb-5 flex items-center gap-3 font-display text-2xl tracking-tight text-paper">
+            {province}
+            <span className="text-sm font-normal text-paper-dim">
+              {stores.filter((s) => s.city === province).length} locales
+            </span>
+          </h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {stores
+              .filter((store) => store.city === province)
+              .map((store) => (
+                <article
+                  key={store.name}
+                  className="flex flex-col rounded-2xl border border-line bg-ink-soft p-6"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-bold tracking-[0.2em] text-acid uppercase">
+                      {store.city}
+                    </p>
+                    {store.badge && (
+                      <span className="rounded-full bg-blaze px-2.5 py-1 text-[10px] font-bold tracking-wide text-ink uppercase">
+                        {store.badge}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="mt-2 font-display text-2xl tracking-tight text-paper">
+                    {store.name}
+                  </h3>
 
-            <dl className="mt-4 flex flex-col gap-2 text-sm text-paper-dim">
-              <div>
-                <dt className="sr-only">Dirección</dt>
-                <dd>{store.address}</dd>
-              </div>
-              <div>
-                <dt className="sr-only">Horario</dt>
-                <dd>{store.hours}</dd>
-              </div>
-              <div>
-                <dt className="sr-only">Teléfono</dt>
-                <dd>{store.phone}</dd>
-              </div>
-            </dl>
+                  <dl className="mt-4 flex flex-col gap-2 text-sm text-paper-dim">
+                    <div>
+                      <dt className="sr-only">Dirección</dt>
+                      <dd>{store.address}</dd>
+                    </div>
+                    <div>
+                      <dt className="sr-only">Horario</dt>
+                      <dd>{store.hours}</dd>
+                    </div>
+                  </dl>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href={mapsUrl(store)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-acid px-5 py-2.5 text-xs font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5"
-              >
-                Cómo llegar
-              </a>
-              <a
-                href={`https://wa.me/${store.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-line px-5 py-2.5 text-xs font-bold tracking-wide text-paper uppercase transition-colors hover:border-paper"
-              >
-                WhatsApp
-              </a>
-            </div>
-          </article>
-        ))}
-      </div>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <a
+                      href={mapsUrl(store)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full bg-acid px-5 py-2.5 text-xs font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5"
+                    >
+                      Cómo llegar
+                    </a>
+                    <a
+                      href={`https://wa.me/${WHATSAPP}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full border border-line px-5 py-2.5 text-xs font-bold tracking-wide text-paper uppercase transition-colors hover:border-paper"
+                    >
+                      WhatsApp
+                    </a>
+                  </div>
+                </article>
+              ))}
+          </div>
+        </section>
+      ))}
 
       <div className="mt-10 rounded-2xl border border-line bg-ink-soft p-6">
         <h2 className="font-display text-xl tracking-tight text-paper">
