@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Anton, Archivo } from "next/font/google";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import RouteProgress from "@/components/route-progress";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -58,6 +59,7 @@ export default function RootLayout({
   return (
     <html lang="es-AR" className={`${anton.variable} ${archivo.variable}`}>
       <body className="flex min-h-screen flex-col antialiased">
+        <RouteProgress />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
