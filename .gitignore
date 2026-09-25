@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agent tooling (skills, registries) — lives globally, not in the repo
+.devin/
+.atl/
+skills-lock.json
