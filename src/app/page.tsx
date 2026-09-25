@@ -128,7 +128,7 @@ export default function HomePage() {
       </section>
 
       {/* CATEGORIES */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <section className="defer-render mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <div className="mb-10 flex items-end justify-between gap-4">
           <h2 className="font-display text-4xl tracking-tight text-paper sm:text-5xl">
             Categorías
@@ -142,7 +142,7 @@ export default function HomePage() {
       </section>
 
       {/* FEATURED PRODUCTS */}
-      <section className="grain relative bg-ink-soft py-20">
+      <section className="grain defer-render relative bg-ink-soft py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -170,7 +170,7 @@ export default function HomePage() {
       </section>
 
       {/* VALUE PROPS */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <section className="defer-render mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <div className="grid gap-6 sm:grid-cols-3">
           <ValueProp
             title="Retiro en local"

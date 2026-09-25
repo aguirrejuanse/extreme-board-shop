@@ -120,7 +120,9 @@ body::before {
   font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Subtle grain overlay used behind hero / section headers for texture */
+/* Subtle grain overlay used behind hero / section headers for texture.
+   Pre-rendered PNG tile — feTurbulence computes noise on the CPU on every
+   repaint, which showed up as main-thread work on low-end mobile. */
 .grain {
   position: relative;
   isolation: isolate;
@@ -134,7 +136,7 @@ body::before {
   opacity: 0.5;
   mix-blend-mode: overlay;
   pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-image: url("/images/noise.png");
 }
 
 .diagonal-edge {
@@ -174,9 +176,20 @@ body::before {
   }
 }
 
-.animate-rise,
-.motion-enter {
+@keyframes slide-in {
+  from {
+    transform: translateY(8px);
+  }
+}
+
+.animate-rise {
   animation: rise var(--motion-enter) var(--ease-smooth-out) both;
+}
+
+/* Page-level entrance is transform-only: an opacity keyframe starting at 0
+   delays the LCP paint of everything inside the template wrapper. */
+.motion-enter {
+  animation: slide-in var(--motion-enter) var(--ease-smooth-out) both;
 }
 
 .card-tilt,
@@ -221,6 +234,14 @@ body::before {
 
 .hero-fade-out {
   animation: hero-fade-out 500ms ease-out both;
+}
+
+/* Skip layout/paint work for sections below the fold until they approach
+   the viewport. `auto` in contain-intrinsic-size keeps the real size once
+   rendered, so the scrollbar doesn't jump. */
+.defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
 }
 
 .skeleton-block {
