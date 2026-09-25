@@ -40,9 +40,9 @@ export default function ProductGridFilterable({
       params.set(key, value);
     }
     const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname, {
-      scroll: false,
-    });
+    const href = query ? `${pathname}?${query}` : pathname;
+    window.dispatchEvent(new CustomEvent("store:navigate", { detail: href }));
+    router.replace(href, { scroll: false });
   }
 
   const filtered = useMemo(() => {

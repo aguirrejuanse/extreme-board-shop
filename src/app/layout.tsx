@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Anton, Archivo } from "next/font/google";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -59,7 +60,7 @@ export default function RootLayout({
   return (
     <html lang="es-AR" className={`${anton.variable} ${archivo.variable}`}>
       <body className="flex min-h-screen flex-col antialiased">
-        <RouteProgress />
+        <Suspense fallback={null}><RouteProgress /></Suspense>
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

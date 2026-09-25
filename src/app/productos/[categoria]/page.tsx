@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { categories, getCategoryBySlug } from "@/data/categories";
 import { getBrands, getProductsByCategory } from "@/data/products";
 import ProductGridFilterable from "@/components/product-grid-filterable";
+import { CatalogSkeleton } from "@/components/store-skeletons";
 
 export function generateStaticParams() {
   return categories.map((category) => ({ categoria: category.slug }));
@@ -73,7 +74,7 @@ export default async function CategoryPage({
         </p>
       </header>
 
-      <Suspense fallback={null}>
+      <Suspense fallback={<CatalogSkeleton gridOnly />}>
         <ProductGridFilterable products={products} brands={brands} />
       </Suspense>
     </section>

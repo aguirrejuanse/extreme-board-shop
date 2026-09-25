@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { categories } from "@/data/categories";
 import { useCartStore, cartCount } from "@/store/cart-store";
@@ -11,6 +12,21 @@ import { formatPrice } from "@/lib/format";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuTrigger = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
+
+  useEffect(() => setMenuOpen(false), [pathname]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuTrigger.current?.focus();
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
   const [bump, setBump] = useState(false);
   const items = useCartStore((state) => state.items);
   const hydrated = useHasHydrated();
@@ -40,7 +56,7 @@ export default function Header() {
       </div>
 
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <Link href="/" className="group flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+        <Link href="/" className="group flex min-w-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
           <Image
             src="/logo.jpg"
             alt="Extreme Board Shop"
@@ -49,7 +65,7 @@ export default function Header() {
             priority
             className="rounded-full"
           />
-          <span className="font-display text-2xl leading-none tracking-tight text-paper sm:text-3xl">
+          <span className="font-display text-xl leading-none tracking-tight text-paper sm:text-3xl">
             EXTREME <span className="text-acid">BOARD SHOP</span>
           </span>
         </Link>
@@ -84,7 +100,7 @@ export default function Header() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3">
           {/* Live region for screen readers: the visible badge is only
               rendered when count > 0, so announcements need a persistent,
               visually-hidden element outside the link's accessible name. */}
@@ -96,7 +112,7 @@ export default function Header() {
           <Link
             href="/carrito"
             aria-label={`Carrito, ${count} ${count === 1 ? "producto" : "productos"}`}
-            className="relative inline-flex items-center gap-2 rounded-full border border-line bg-ink-soft px-4 py-2 text-sm font-semibold text-paper transition-colors hover:border-acid hover:text-acid"
+            className="relative inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-line bg-ink-soft px-4 py-2 text-sm font-semibold text-paper transition-colors hover:border-acid hover:text-acid"
           >
             <CartIcon />
             <span className="hidden sm:inline">Carrito</span>
@@ -113,10 +129,12 @@ export default function Header() {
 
           <button
             type="button"
-            aria-label="Abrir menú"
+            ref={menuTrigger}
+            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-controls="mobile-navigation"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
-            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-line text-paper lg:hidden"
+            className="motion-press inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-line text-paper lg:hidden"
           >
             <span className="sr-only">Menú</span>
             {menuOpen ? "✕" : "☰"}
@@ -124,9 +142,9 @@ export default function Header() {
         </div>
       </div>
 
-      {menuOpen && (
-        <nav className="border-t border-line bg-ink px-4 pb-4 lg:hidden">
-          <ul className="flex flex-col divide-y divide-line">
+      <div className="mobile-menu lg:hidden" data-open={menuOpen} inert={!menuOpen} aria-hidden={!menuOpen}>
+        <nav id="mobile-navigation" aria-label="Navegación móvil" className="bg-ink">
+          <ul className="flex flex-col divide-y divide-line border-t border-line px-4 pb-4">
             {categories.map((category) => (
               <li key={category.slug}>
                 <Link
@@ -155,7 +173,7 @@ export default function Header() {
             ))}
           </ul>
         </nav>
-      )}
+      </div>
     </header>
   );
 }

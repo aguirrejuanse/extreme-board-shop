@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
-import { useCartStore, cartTotal, MAX_LINE_QUANTITY } from "@/store/cart-store";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useCartStore, cartTotal, MAX_LINE_QUANTITY, type CartItem } from "@/store/cart-store";
+import { CartSkeleton } from "@/components/store-skeletons";
 import { useHasHydrated } from "@/hooks/use-hydrated";
 import { formatPrice } from "@/lib/format";
 import { placeholderImage } from "@/lib/image";
@@ -22,6 +23,26 @@ export default function CartView() {
   const [cp, setCp] = useState("");
   const [estimate, setEstimate] = useState<ShippingEstimate | null>(null);
   const [cpError, setCpError] = useState(false);
+  const [exiting, setExiting] = useState<{ line: CartItem; index: number }[]>([]);
+  const exitTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
+
+  useEffect(() => {
+    const timers = exitTimers.current;
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  function handleRemove(line: CartItem) {
+    const key = JSON.stringify([line.productId, line.variantId]);
+    if (exitTimers.current.has(key)) return;
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setExiting((previous) => [...previous, { line, index: items.indexOf(line) }]);
+      exitTimers.current.set(key, setTimeout(() => {
+        setExiting((previous) => previous.filter((entry) => entry.line !== line));
+        exitTimers.current.delete(key);
+      }, 150));
+    }
+    removeItem(line.productId, line.variantId);
+  }
 
   function handleEstimate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,16 +52,12 @@ export default function CartView() {
   }
 
   if (!hydrated) {
-    return (
-      <div className="rounded-2xl border border-line bg-ink-soft p-10 text-center text-sm text-paper-dim">
-        Cargando carrito…
-      </div>
-    );
+    return <CartSkeleton />;
   }
 
-  if (items.length === 0) {
+  if (items.length === 0 && exiting.length === 0) {
     return (
-      <div className="rounded-2xl border border-line bg-ink-soft p-14 text-center">
+      <div className="motion-enter rounded-2xl border border-line bg-ink-soft p-14 text-center">
         <p className="font-display text-3xl tracking-tight text-paper">
           Tu carrito está vacío
         </p>
@@ -49,7 +66,7 @@ export default function CartView() {
         </p>
         <Link
           href="/productos/skate"
-          className="mt-6 inline-block rounded-full bg-acid px-7 py-3 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5"
+          className="mt-6 inline-block rounded-full bg-acid px-7 py-3 text-sm font-bold tracking-wide text-ink uppercase motion-press hover-lift"
         >
           Ir al catálogo
         </Link>
@@ -57,6 +74,10 @@ export default function CartView() {
     );
   }
 
+  const displayedItems = items.map((line) => ({ line, removed: false }));
+  for (const entry of exiting) {
+    displayedItems.splice(entry.index, 0, { line: entry.line, removed: true });
+  }
   const total = cartTotal(items);
   const freeShipping = total >= FREE_SHIPPING_THRESHOLD;
   const missingForFree = FREE_SHIPPING_THRESHOLD - total;
@@ -67,10 +88,12 @@ export default function CartView() {
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
       <ul className="flex flex-col divide-y divide-line rounded-2xl border border-line bg-ink-soft">
-        {items.map((line) => (
+        {displayedItems.map(({ line, removed }) => (
           <li
-            key={`${line.productId}-${line.variantId ?? "base"}`}
-            className="flex gap-4 p-4 sm:p-5"
+            key={JSON.stringify([line.productId, line.variantId])}
+            inert={removed}
+            aria-hidden={removed || undefined}
+            className={`flex gap-4 p-4 sm:p-5 ${removed ? "cart-line-exit" : ""}`}
           >
             <Link
               href={`/productos/${line.category}/${line.slug}`}
@@ -88,7 +111,7 @@ export default function CartView() {
               />
             </Link>
 
-            <div className="flex flex-1 flex-col gap-1">
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="text-[11px] font-semibold tracking-wide text-acid-dim uppercase">
@@ -128,8 +151,8 @@ export default function CartView() {
                   >
                     −
                   </button>
-                  <span className="w-8 text-center text-xs font-semibold text-paper">
-                    {line.quantity}
+                  <span aria-live="polite" className="w-8 text-center text-xs font-semibold text-paper">
+                    <span key={line.quantity} className="value-feedback">{line.quantity}</span>
                   </span>
                   <button
                     type="button"
@@ -146,7 +169,7 @@ export default function CartView() {
 
                 <button
                   type="button"
-                  onClick={() => removeItem(line.productId, line.variantId)}
+                  onClick={() => handleRemove(line)}
                   className="cursor-pointer text-xs font-semibold text-paper-dim underline decoration-blaze decoration-2 underline-offset-4 hover:text-blaze"
                 >
                   Quitar
@@ -157,7 +180,7 @@ export default function CartView() {
         ))}
       </ul>
 
-      <aside className="h-max rounded-2xl border border-line bg-ink-soft p-6">
+      <aside hidden={items.length === 0} className="h-max rounded-2xl border border-line bg-ink-soft p-6">
         <h2 className="font-display text-2xl tracking-tight text-paper">
           Resumen
         </h2>
@@ -182,8 +205,8 @@ export default function CartView() {
               className="mt-2 h-1.5 overflow-hidden rounded-full bg-ink"
             >
               <div
-                className="h-full rounded-full bg-blaze transition-all duration-500"
-                style={{ width: `${progress}%` }}
+                className="shipping-progress h-full rounded-full bg-blaze"
+                style={{ transform: `scaleX(${progress / 100})` }}
               />
             </div>
           </div>
@@ -252,9 +275,9 @@ export default function CartView() {
           </a>
         </form>
 
-        <div className="mt-4 flex justify-between border-t border-line pt-4 font-display text-2xl tracking-tight text-paper">
+        <div aria-live="polite" aria-atomic="true" className="mt-4 flex justify-between border-t border-line pt-4 font-display text-2xl tracking-tight text-paper">
           <span>Total</span>
-          <span>{formatPrice(total + (shippingCost ?? 0))}</span>
+          <span key={total + (shippingCost ?? 0)} className="value-feedback">{formatPrice(total + (shippingCost ?? 0))}</span>
         </div>
         <p className="mt-1 text-right text-xs text-paper-dim">
           o {installments.count} cuotas sin interés de{" "}
@@ -262,7 +285,7 @@ export default function CartView() {
         </p>
         <Link
           href="/checkout"
-          className="mt-6 block rounded-full bg-acid px-6 py-3.5 text-center text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5"
+          className="mt-6 block rounded-full bg-acid px-6 py-3.5 text-center text-sm font-bold tracking-wide text-ink uppercase motion-press hover-lift"
         >
           Ir a checkout
         </Link>

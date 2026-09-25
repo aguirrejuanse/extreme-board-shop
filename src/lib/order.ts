@@ -63,9 +63,9 @@ function isValidOrder(value: unknown): value is Order {
 
 export function readLastOrder(): Order | null {
   if (typeof window === "undefined") return null;
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return null;
   try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
     const parsed = JSON.parse(raw);
     return isValidOrder(parsed) ? parsed : null;
   } catch {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useId, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useCartStore, cartTotal } from "@/store/cart-store";
 import { useHasHydrated } from "@/hooks/use-hydrated";
@@ -8,6 +8,8 @@ import { formatPrice } from "@/lib/format";
 import { generateOrderNumber } from "@/lib/format";
 import { saveOrder, type ShippingDetails } from "@/lib/order";
 import OrderLineRow from "@/components/order-line-row";
+import { CheckoutSkeleton } from "@/components/store-skeletons";
+import type { CartItem } from "@/store/cart-store";
 
 const initialForm: ShippingDetails = {
   fullName: "",
@@ -28,8 +30,11 @@ export default function CheckoutForm() {
     Partial<Record<keyof ShippingDetails, string>>
   >({});
   const [submitting, setSubmitting] = useState(false);
-
-  const total = cartTotal(items);
+  const submittingRef = useRef(false);
+  const [submittedItems, setSubmittedItems] = useState<CartItem[] | null>(null);
+  const [submitError, setSubmitError] = useState("");
+  const summaryItems = submittedItems ?? items;
+  const total = cartTotal(summaryItems);
 
   function update<K extends keyof ShippingDetails>(key: K, value: ShippingDetails[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -46,7 +51,7 @@ export default function CheckoutForm() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (items.length === 0) return;
+    if (submittingRef.current || items.length === 0) return;
 
     const fieldErrors: Partial<Record<keyof ShippingDetails, string>> = {};
     for (const key of requiredTextFields) {
@@ -56,10 +61,13 @@ export default function CheckoutForm() {
     }
     if (Object.keys(fieldErrors).length > 0) {
       setErrors(fieldErrors);
+      Array.from(event.currentTarget.querySelectorAll("input")).find((input) => !input.value.trim())?.focus();
       return;
     }
 
+    submittingRef.current = true;
     setSubmitting(true);
+    setSubmitError("");
 
     const trimmedForm: ShippingDetails = {
       ...form,
@@ -78,20 +86,24 @@ export default function CheckoutForm() {
       total,
     };
 
-    saveOrder(order);
+    try {
+      saveOrder(order);
+    } catch {
+      submittingRef.current = false;
+      setSubmitting(false);
+      setSubmitError("No pudimos guardar el pedido en este dispositivo. Tu carrito sigue intacto. Habilitá el almacenamiento del navegador y volvé a intentar.");
+      return;
+    }
+    setSubmittedItems(items);
     clear();
     router.push("/checkout/confirmacion");
   }
 
   if (!hydrated) {
-    return (
-      <div className="rounded-2xl border border-line bg-ink-soft p-10 text-center text-sm text-paper-dim">
-        Cargando carrito…
-      </div>
-    );
+    return <CheckoutSkeleton />;
   }
 
-  if (items.length === 0) {
+  if (summaryItems.length === 0) {
     return (
       <div className="rounded-2xl border border-line bg-ink-soft p-10 text-center text-sm text-paper-dim">
         Tu carrito está vacío. Agregá productos antes de finalizar la compra.
@@ -101,8 +113,8 @@ export default function CheckoutForm() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_320px]">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-        <fieldset className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={handleSubmit} aria-busy={submitting} className="flex flex-col gap-6">
+        <fieldset disabled={submitting} className="grid gap-4 sm:grid-cols-2">
           <legend className="mb-1 font-display text-xl tracking-tight text-paper sm:col-span-2">
             Datos de contacto
           </legend>
@@ -153,7 +165,7 @@ export default function CheckoutForm() {
           </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset disabled={submitting}>
           <legend className="mb-3 font-display text-xl tracking-tight text-paper">
             Método de envío
           </legend>
@@ -195,10 +207,11 @@ export default function CheckoutForm() {
         <button
           type="submit"
           disabled={submitting || items.length === 0}
-          className="cursor-pointer rounded-full bg-acid px-8 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+          className="cursor-pointer rounded-full bg-acid px-8 py-3.5 text-sm font-bold tracking-wide text-ink uppercase motion-press hover-lift disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Confirmar pedido
+          {submitting ? "Abriendo confirmación…" : "Confirmar pedido"}
         </button>
+        <p role="alert" className="text-sm font-semibold text-blaze">{submitError}</p>
       </form>
 
       <aside className="h-max rounded-2xl border border-line bg-ink-soft p-6">
@@ -206,7 +219,7 @@ export default function CheckoutForm() {
           Tu pedido
         </h2>
         <ul className="mt-4 space-y-3 text-sm">
-          {items.map((line) => (
+          {summaryItems.map((line) => (
             <OrderLineRow
               key={`${line.productId}-${line.variantId ?? "base"}`}
               line={line}
@@ -239,6 +252,7 @@ function Field({
   autoComplete?: string;
   error?: string;
 }) {
+  const errorId = useId();
   return (
     <label className="flex flex-col gap-1.5 text-xs font-semibold tracking-wide text-paper-dim uppercase">
       {label}
@@ -248,6 +262,7 @@ function Field({
         autoComplete={autoComplete}
         value={value}
         aria-invalid={Boolean(error) || undefined}
+        aria-describedby={error ? errorId : undefined}
         onChange={(event) => onChange(event.target.value)}
         className={`rounded-lg border bg-ink px-3.5 py-2.5 text-sm font-normal tracking-normal text-paper normal-case placeholder:text-paper-dim/60 focus:outline-none ${
           error
@@ -256,7 +271,7 @@ function Field({
         }`}
       />
       {error && (
-        <span className="text-[11px] font-semibold tracking-normal text-blaze normal-case">
+        <span id={errorId} className="text-[11px] font-semibold tracking-normal text-blaze normal-case">
           {error}
         </span>
       )}

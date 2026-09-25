@@ -111,7 +111,7 @@ export default function LocalesPage() {
                       href={mapsUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full bg-acid px-5 py-2.5 text-xs font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5"
+                      className="rounded-full bg-acid px-5 py-2.5 text-xs font-bold tracking-wide text-ink uppercase motion-press hover-lift"
                     >
                       Cómo llegar
                     </a>
