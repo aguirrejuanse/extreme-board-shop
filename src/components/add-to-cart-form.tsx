@@ -46,7 +46,7 @@ export default function AddToCartForm({ product }: { product: Product }) {
                 type="button"
                 onClick={() => setVariantId(v.id)}
                 aria-pressed={variantId === v.id}
-                className={`min-w-11 cursor-pointer rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
+                className={`min-h-11 min-w-11 cursor-pointer rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
                   variantId === v.id
                     ? "border-acid bg-acid text-ink"
                     : "border-line bg-ink-soft text-paper hover:border-paper-dim"
@@ -68,7 +68,7 @@ export default function AddToCartForm({ product }: { product: Product }) {
             type="button"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             aria-label="Restar cantidad"
-            className="flex h-10 w-10 cursor-pointer items-center justify-center text-lg text-paper transition-colors hover:text-acid"
+            className="flex h-11 w-11 cursor-pointer items-center justify-center text-lg text-paper transition-colors hover:text-acid"
           >
             −
           </button>
@@ -82,7 +82,7 @@ export default function AddToCartForm({ product }: { product: Product }) {
             }
             disabled={quantity >= MAX_LINE_QUANTITY}
             aria-label="Sumar cantidad"
-            className="flex h-10 w-10 cursor-pointer items-center justify-center text-lg text-paper transition-colors hover:text-acid disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-paper"
+            className="flex h-11 w-11 cursor-pointer items-center justify-center text-lg text-paper transition-colors hover:text-acid disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-paper"
           >
             +
           </button>
