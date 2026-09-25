@@ -7,7 +7,12 @@
   --color-paper-dim: var(--paper-dim);
   --color-acid: var(--acid);
   --color-acid-dim: var(--acid-dim);
+  --color-acid-soft: var(--acid-soft);
   --color-blaze: var(--blaze);
+  --color-blaze-soft: var(--blaze-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-ring: var(--ring);
   --color-line: var(--line);
   --font-display: var(--font-anton);
   --font-body: var(--font-archivo);
@@ -22,6 +27,26 @@
   --acid-dim: #c71f6c;
   --blaze: #ff7a1f;
   --line: #2c2c30;
+  /* Soft variants are translucent tints for accent *backgrounds* (badges,
+     selected states, subtle callouts) — solid versions would need a separate
+     hover/step color, while alpha composes over --ink/--ink-soft for free. */
+  --acid-soft: rgb(255 45 140 / 0.12);
+  --blaze-soft: rgb(255 122 31 / 0.14);
+  --success: #3ddc97;
+  --success-soft: rgb(61 220 151 / 0.12);
+  /* Focus ring is its own token (not --acid) so the keyboard-navigation
+     indicator can diverge from brand color without touching every component. */
+  --ring: var(--acid);
+}
+
+/* Keyboard navigation gets a consistent pink outline. Lives in the base
+   layer so components with their own focus treatment (form fields swapping
+   border color) can keep it — utilities override this rule. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
 
 * {
@@ -117,9 +142,28 @@ body {
   transform: translateY(-6px) rotate(-0.4deg);
 }
 
+/* Cart badge pulse when a line is added — feedback at the header level so
+   the user sees the cart react even after the inline confirmation fades. */
+@keyframes badge-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-badge-pop {
+  animation: badge-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-rise,
+  .animate-badge-pop,
   .card-tilt {
     animation: none !important;
     transition: none !important;

@@ -62,7 +62,7 @@ export default function HomePage() {
           >
             <Link
               href="/productos/skate"
-              className="rounded-full bg-acid px-7 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(215,255,59,0.6)]"
+              className="rounded-full bg-acid px-7 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(255,45,140,0.6)]"
             >
               Ver Skate
             </Link>

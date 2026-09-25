@@ -43,6 +43,7 @@ export const products: Product[] = [
     brand: "Santa Cruz",
     category: "skate",
     price: 95000,
+    compareAtPrice: 118000,
     shortDescription: "Deck solo, para armar tu setup a tu gusto.",
     description:
       "El gráfico Screaming Hand original en un deck de 8 capas de maple prensado, con el pop y la durabilidad que necesitás para trucos técnicos. Ideal si ya tenés trucks y ruedas y solo buscás renovar la madera.",
@@ -67,6 +68,7 @@ export const products: Product[] = [
     brand: "Spitfire",
     category: "skate",
     price: 45000,
+    compareAtPrice: 56000,
     shortDescription: "Uretano de fórmula competitiva, 99a de dureza.",
     description:
       "Las Formula Four son las ruedas más rápidas y duraderas que vas a encontrar para street y park. Uretano de alto rendimiento que mantiene el filo durante mucho más tiempo que una rueda común.",
@@ -215,6 +217,7 @@ export const products: Product[] = [
     brand: "Quiksilver",
     category: "ropa",
     price: 24000,
+    compareAtPrice: 30000,
     shortDescription: "Remera de algodón peinado, corte relajado.",
     description:
       "Básico de todos los días: algodón peinado de 180g, estampa al frente y corte que no aprieta. Aguanta lavado tras lavado sin perder forma.",
@@ -289,6 +292,7 @@ export const products: Product[] = [
     brand: "DC Shoes",
     category: "calzado",
     price: 68000,
+    compareAtPrice: 84000,
     shortDescription: "Base ancha y suela de goma vulcanizada para skate técnico.",
     description:
       "Diseñada junto a skaters profesionales, la Court Graffik prioriza estabilidad y sensibilidad sobre la tabla, con una suela vulcanizada que responde en cada truco.",
@@ -342,6 +346,7 @@ export const products: Product[] = [
     brand: "VonZipper",
     category: "accesorios",
     price: 32000,
+    compareAtPrice: 40000,
     shortDescription: "Lente polarizado con protección UV400.",
     description:
       "Marco liviano de acetato y lente polarizado con protección UV400, ideal para los días de sol fuerte tanto en la ciudad como en la montaña.",

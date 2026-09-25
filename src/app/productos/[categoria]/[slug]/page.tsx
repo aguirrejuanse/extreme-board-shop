@@ -148,12 +148,50 @@ export default async function ProductPage({
           <h1 className="mt-2 font-display text-4xl tracking-tight text-paper sm:text-5xl">
             {product.name}
           </h1>
-          <p className="mt-4 font-display text-3xl text-paper">
-            {formatPrice(product.price)}
-          </p>
+          <div className="mt-4 flex flex-wrap items-baseline gap-3">
+            <p className="font-display text-3xl text-paper">
+              {formatPrice(product.price)}
+            </p>
+            {product.compareAtPrice && (
+              <>
+                <p className="text-sm text-paper-dim line-through">
+                  {formatPrice(product.compareAtPrice)}
+                </p>
+                <span className="rounded-full bg-blaze px-2.5 py-1 text-[10px] font-bold tracking-wide text-ink uppercase">
+                  -
+                  {Math.round(
+                    (1 - product.price / product.compareAtPrice) * 100
+                  )}
+                  % off
+                </span>
+              </>
+            )}
+          </div>
           <p className="mt-1 text-xs text-paper-dim">
-            Hasta 3 cuotas sin interés · Precio de contado
+            3 cuotas sin interés de {formatPrice(Math.round(product.price / 3))}{" "}
+            · Precio de contado
           </p>
+
+          <ul className="mt-6 flex flex-col gap-1.5 text-xs text-paper-dim">
+            <li className="flex items-center gap-2">
+              <span aria-hidden="true" className="font-bold text-success">
+                ✓
+              </span>
+              En stock — listo para retirar o enviar
+            </li>
+            <li className="flex items-center gap-2">
+              <span aria-hidden="true" className="font-bold text-success">
+                ✓
+              </span>
+              Retiro gratis en nuestros locales de Mendoza y San Juan
+            </li>
+            <li className="flex items-center gap-2">
+              <span aria-hidden="true" className="font-bold text-success">
+                ✓
+              </span>
+              Envíos a todo el país
+            </li>
+          </ul>
 
           <p className="mt-6 max-w-lg text-sm leading-relaxed text-paper-dim">
             {product.description}
