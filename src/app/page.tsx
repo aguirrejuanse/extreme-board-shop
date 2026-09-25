@@ -86,7 +86,6 @@ export default function HomePage() {
 
           <p
             className="animate-rise max-w-md text-base leading-relaxed text-paper-dim"
-            style={{ animationDelay: "0.15s" }}
           >
             Tablas, indumentaria y accesorios de skate y snowboard para calle,
             park y montaña. La cordillera es nuestro patio trasero.
@@ -94,11 +93,10 @@ export default function HomePage() {
 
           <div
             className="animate-rise flex flex-wrap gap-4"
-            style={{ animationDelay: "0.25s" }}
           >
             <Link
               href="/productos/skate"
-              className="rounded-full bg-acid px-7 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(255,45,140,0.6)]"
+              className="rounded-full bg-acid px-7 py-3.5 text-sm font-bold tracking-wide text-ink uppercase motion-press hover-lift hover:shadow-[0_10px_30px_-10px_rgba(255,45,140,0.6)]"
             >
               Ver Skate
             </Link>

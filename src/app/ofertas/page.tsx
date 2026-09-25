@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { getBrands, getSaleProducts } from "@/data/products";
 import ProductGridFilterable from "@/components/product-grid-filterable";
+import { CatalogSkeleton } from "@/components/store-skeletons";
 
 export const metadata: Metadata = {
   title: "Ofertas y descuentos en skate, snow y streetwear",
@@ -44,7 +45,7 @@ export default function OfertasPage() {
           No hay ofertas activas en este momento. Volvé pronto.
         </p>
       ) : (
-        <Suspense fallback={null}>
+        <Suspense fallback={<CatalogSkeleton gridOnly />}>
           <ProductGridFilterable products={saleProducts} brands={brands} />
         </Suspense>
       )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { useCartStore, MAX_LINE_QUANTITY } from "@/store/cart-store";
@@ -10,6 +10,10 @@ export default function AddToCartForm({ product }: { product: Product }) {
   const [variantId, setVariantId] = useState(product.variants?.[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [announcement, setAnnouncement] = useState("");
+  const feedbackTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  useEffect(() => () => clearTimeout(feedbackTimer.current), []);
 
   const variant = product.variants?.find((v) => v.id === variantId);
 
@@ -29,7 +33,12 @@ export default function AddToCartForm({ product }: { product: Product }) {
       quantity
     );
     setAdded(true);
-    setTimeout(() => setAdded(false), 2200);
+    const line = useCartStore.getState().items.find(
+      (item) => item.productId === product.id && item.variantId === variant?.id
+    );
+    setAnnouncement(`${product.name}: ${line?.quantity ?? quantity} en el carrito (máximo ${MAX_LINE_QUANTITY}).`);
+    clearTimeout(feedbackTimer.current);
+    feedbackTimer.current = setTimeout(() => setAdded(false), 2200);
   }
 
   return (
@@ -67,8 +76,9 @@ export default function AddToCartForm({ product }: { product: Product }) {
           <button
             type="button"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            disabled={quantity <= 1}
             aria-label="Restar cantidad"
-            className="flex h-11 w-11 cursor-pointer items-center justify-center text-lg text-paper transition-colors hover:text-acid"
+            className="motion-press flex h-11 w-11 cursor-pointer items-center justify-center text-lg text-paper transition-colors hover:text-acid disabled:cursor-not-allowed disabled:opacity-40"
           >
             −
           </button>
@@ -93,19 +103,18 @@ export default function AddToCartForm({ product }: { product: Product }) {
         <button
           type="button"
           onClick={handleAdd}
-          className="cursor-pointer rounded-full bg-acid px-8 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(255,45,140,0.6)]"
+          className="cursor-pointer rounded-full bg-acid px-8 py-3.5 text-sm font-bold tracking-wide text-ink uppercase motion-press hover-lift hover:shadow-[0_10px_30px_-10px_rgba(255,45,140,0.6)]"
         >
           Agregar al carrito
         </button>
 
-        {added && (
-          <Link
-            href="/carrito"
-            className="text-sm font-semibold text-acid underline decoration-2 underline-offset-4"
-          >
-            ✓ Agregado — ver carrito
-          </Link>
-        )}
+        <Link
+          href="/carrito"
+          className="text-sm font-semibold text-acid underline decoration-2 underline-offset-4"
+        >
+          {added ? "✓ Agregado — ver carrito" : "Ver carrito"}
+        </Link>
+        <span role="status" aria-live="polite" className="sr-only">{announcement}</span>
       </div>
     </div>
   );

@@ -19,6 +19,10 @@
 }
 
 :root {
+  --motion-press: 150ms;
+  --motion-enter: 250ms;
+  --motion-exit: 150ms;
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ink: #0b0b0c;
   --ink-soft: #17171a;
   --paper: #f4f2ea;
@@ -66,12 +70,11 @@
   input,
   select {
     transition:
-      color 0.2s ease,
-      background-color 0.2s ease,
-      border-color 0.2s ease,
-      opacity 0.2s ease,
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
+      color var(--motion-press) ease,
+      background-color var(--motion-press) ease,
+      border-color var(--motion-press) ease,
+      opacity var(--motion-press) ease,
+      transform var(--motion-press) var(--ease-smooth-out);
   }
 }
 
@@ -93,10 +96,19 @@ body {
   background: var(--ink);
   color: var(--paper);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Ambient accent gradients on a fixed pseudo-layer: same look as
+   background-attachment: fixed without repaint-invalidating the body. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-image:
     radial-gradient(circle at 15% 0%, rgba(255, 45, 140, 0.08), transparent 45%),
     radial-gradient(circle at 100% 30%, rgba(255, 122, 31, 0.07), transparent 40%);
-  background-attachment: fixed;
 }
 
 ::selection {
@@ -154,7 +166,7 @@ body {
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -162,17 +174,122 @@ body {
   }
 }
 
-.animate-rise {
-  animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+.animate-rise,
+.motion-enter {
+  animation: rise var(--motion-enter) var(--ease-smooth-out) both;
 }
 
-.card-tilt {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+.card-tilt,
+.motion-press {
+  transition: transform var(--motion-press) var(--ease-smooth-out);
 }
 
-.card-tilt:hover {
-  transform: translateY(-6px) rotate(-0.4deg);
+.motion-press:active:not(:disabled) {
+  transform: scale(0.97);
 }
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card-tilt:hover,
+  .hover-lift:hover:not(:disabled):not(:active) {
+    transform: translateY(-2px);
+  }
+  .group:hover .image-zoom {
+    transform: scale(1.03);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+  .category-tagline { opacity: 0; }
+  .group:hover .category-tagline,
+  .group:focus-visible .category-tagline { opacity: 1; }
+}
+
+/* Hero carousel overlays fade on rotation. The base slide carries no
+   transition or animation — it's the LCP element and must paint as soon
+   as its bytes arrive. */
+@keyframes hero-fade-in {
+  from { opacity: 0; }
+}
+
+.hero-fade-in {
+  animation: hero-fade-in 500ms var(--ease-smooth-out) both;
+}
+
+@keyframes hero-fade-out {
+  to { opacity: 0; }
+}
+
+.hero-fade-out {
+  animation: hero-fade-out 500ms ease-out both;
+}
+
+.skeleton-block {
+  border-radius: 0.5rem;
+  background: var(--line);
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  50% { opacity: 0.5; }
+}
+
+@keyframes line-exit {
+  to { opacity: 0; transform: translateX(8px); }
+}
+
+.cart-line-exit {
+  pointer-events: none;
+  animation: line-exit var(--motion-exit) var(--ease-smooth-out) forwards;
+}
+
+@keyframes value-feedback {
+  from { color: var(--acid); }
+}
+
+.value-feedback {
+  animation: value-feedback var(--motion-enter) ease-out;
+}
+
+.shipping-progress {
+  transform-origin: left;
+  transition: transform var(--motion-enter) var(--ease-smooth-out);
+}
+
+.mobile-menu {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows var(--motion-exit) var(--ease-smooth-out), opacity var(--motion-exit) ease, visibility var(--motion-exit);
+}
+
+.mobile-menu[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition-duration: var(--motion-enter);
+}
+
+.mobile-menu > nav { min-height: 0; overflow: hidden; }
+
+@media (min-width: 1024px) {
+  .mobile-menu { display: none; }
+}
+
+.route-progress { opacity: 0; }
+.route-progress[data-visible="true"] { opacity: 1; }
+.route-progress[data-visible="true"] > div { animation: route-travel 1.2s linear infinite; }
+
+@keyframes route-travel {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(340%); }
+}
+
+@keyframes success-check {
+  from { opacity: 0; transform: scale(0.96); }
+}
+
+.success-check { animation: success-check var(--motion-enter) var(--ease-smooth-out) both; }
 
 /* Cart badge pulse when a line is added — feedback at the header level so
    the user sees the cart react even after the inline confirmation fades. */
@@ -181,7 +298,7 @@ body {
     transform: scale(1);
   }
   40% {
-    transform: scale(1.4);
+    transform: scale(1.12);
   }
   100% {
     transform: scale(1);
@@ -189,21 +306,17 @@ body {
 }
 
 .animate-badge-pop {
-  animation: badge-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: badge-pop var(--motion-enter) var(--ease-smooth-out);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee,
-  .animate-rise,
-  .animate-badge-pop,
-  .card-tilt {
+  *,
+  *::before,
+  *::after {
     animation: none !important;
     transition: none !important;
+    scroll-behavior: auto !important;
   }
-  a,
-  button,
-  input,
-  select {
-    transition: none !important;
-  }
+  .motion-press:active:not(:disabled) { transform: none; }
+  .route-progress > div { transform: none; width: 100%; }
 }

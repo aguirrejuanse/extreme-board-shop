@@ -56,7 +56,7 @@ export default function BrandsPage() {
                   alt={brand}
                   fill
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  className="object-cover image-zoom"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent transition-opacity group-hover:from-ink/95" />
                 <div className="relative flex flex-col gap-1 p-5">

@@ -20,7 +20,7 @@ export default function ProductCard({ product }: { product: Product }) {
           alt={`${product.brand} ${product.name}`}
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className="object-cover image-zoom"
         />
         {product.isNew && (
           <span className="absolute top-3 left-3 rounded-full bg-acid px-2.5 py-1 text-[10px] font-bold tracking-wide text-ink uppercase">

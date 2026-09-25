@@ -5,6 +5,7 @@ import Link from "next/link";
 import { readLastOrder, shippingMethodLabels, type Order } from "@/lib/order";
 import { formatPrice } from "@/lib/format";
 import OrderLineRow from "@/components/order-line-row";
+import { ConfirmationSkeleton } from "@/components/store-skeletons";
 
 export default function OrderConfirmation() {
   const [order, setOrder] = useState<Order | null | undefined>(undefined);
@@ -14,7 +15,7 @@ export default function OrderConfirmation() {
   }, []);
 
   if (order === undefined) {
-    return null;
+    return <ConfirmationSkeleton />;
   }
 
   if (order === null) {
@@ -28,7 +29,7 @@ export default function OrderConfirmation() {
         </p>
         <Link
           href="/productos/skate"
-          className="mt-6 inline-block rounded-full bg-acid px-7 py-3 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5"
+          className="mt-6 inline-block rounded-full bg-acid px-7 py-3 text-sm font-bold tracking-wide text-ink uppercase motion-press hover-lift"
         >
           Ir al catálogo
         </Link>
@@ -37,18 +38,18 @@ export default function OrderConfirmation() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
+    <div className="motion-enter grid gap-8 lg:grid-cols-[1fr_340px]">
       <div className="rounded-2xl border border-acid/50 bg-ink-soft p-8">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-acid text-xl font-bold text-ink">
+        <span aria-hidden="true" className="success-check inline-flex h-12 w-12 items-center justify-center rounded-full bg-acid text-xl font-bold text-ink">
           ✓
         </span>
         <h1 className="mt-4 font-display text-4xl tracking-tight text-paper sm:text-5xl">
           ¡Pedido recibido!
         </h1>
         <p className="mt-2 text-sm text-paper-dim">
-          Guardá tu número de orden. Te vamos a contactar a{" "}
-          <span className="text-paper">{order.customer.email}</span> para
-          coordinar {shippingMethodLabels[order.customer.shippingMethod].toLowerCase()}.
+          Pedido de demostración: no se realizó ningún cobro ni se enviaron mensajes.
+          Guardá tu número de orden. Email registrado:{" "}
+          <span className="break-words text-paper">{order.customer.email}</span>.
         </p>
 
         <p className="mt-6 inline-block rounded-lg border border-line bg-ink px-4 py-2 font-mono text-sm tracking-wider text-acid">

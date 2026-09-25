@@ -39,7 +39,7 @@ export default function NewsletterForm() {
       />
       <button
         type="submit"
-        className="cursor-pointer rounded-full bg-acid px-5 py-2.5 text-xs font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5"
+        className="cursor-pointer rounded-full bg-acid px-5 py-2.5 text-xs font-bold tracking-wide text-ink uppercase motion-press hover-lift"
       >
         Sumate
       </button>

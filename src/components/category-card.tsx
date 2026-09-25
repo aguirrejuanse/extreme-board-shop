@@ -13,7 +13,7 @@ export default function CategoryCard({ category }: { category: Category }) {
         alt={category.name}
         fill
         sizes="(min-width: 1024px) 20vw, 50vw"
-        className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+        className="object-cover image-zoom"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent transition-opacity group-hover:from-ink/95" />
       <div className="relative p-5">
@@ -22,7 +22,7 @@ export default function CategoryCard({ category }: { category: Category }) {
         </p>
         {/* Always visible below lg (no reliable hover on touch); on desktop it
             keeps the reveal-on-hover treatment. */}
-        <p className="mt-1 text-xs text-paper-dim transition-opacity duration-300 lg:opacity-0 lg:group-hover:opacity-100">
+        <p className="category-tagline mt-1 text-xs text-paper-dim transition-opacity">
           {category.tagline}
         </p>
       </div>
