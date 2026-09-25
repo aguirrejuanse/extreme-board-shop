@@ -6,6 +6,7 @@ import { getFeaturedProducts, getAllBrands } from "@/data/products";
 import CategoryCard from "@/components/category-card";
 import ProductCard from "@/components/product-card";
 import { placeholderImage } from "@/lib/image";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Skate, Snow y Streetwear en Mendoza y San Juan",
@@ -18,11 +19,81 @@ export const metadata: Metadata = {
 
 const brands = getAllBrands();
 
+// Local SEO: one SportingGoodsStore node per physical location so both
+// Mendoza and San Juan are eligible for local pack / "cerca de mí" results,
+// grouped under the same parent Organization.
+const storesJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#org`,
+      name: "Extreme Board Shop",
+      url: SITE_URL,
+      logo: `${SITE_URL}/logo.jpg`,
+    },
+    {
+      "@type": "SportingGoodsStore",
+      parentOrganization: { "@id": `${SITE_URL}/#org` },
+      name: "Extreme Board Shop — Mendoza",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Av. San Martín 1234",
+        addressLocality: "Mendoza",
+        addressRegion: "Mendoza",
+        addressCountry: "AR",
+      },
+      openingHoursSpecification: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ],
+        opens: "10:00",
+        closes: "20:00",
+      },
+    },
+    {
+      "@type": "SportingGoodsStore",
+      parentOrganization: { "@id": `${SITE_URL}/#org` },
+      name: "Extreme Board Shop — San Juan",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Av. Libertador 890",
+        addressLocality: "San Juan",
+        addressRegion: "San Juan",
+        addressCountry: "AR",
+      },
+      openingHoursSpecification: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ],
+        opens: "10:00",
+        closes: "20:00",
+      },
+    },
+  ],
+};
+
 export default function HomePage() {
   const featured = getFeaturedProducts();
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(storesJsonLd) }}
+      />
       {/* HERO */}
       <section className="grain diagonal-edge relative overflow-hidden bg-ink-soft pb-24">
         <div className="pointer-events-none absolute inset-0 opacity-25">

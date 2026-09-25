@@ -64,6 +64,14 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
+          {/* Live region for screen readers: the visible badge is only
+              rendered when count > 0, so announcements need a persistent,
+              visually-hidden element outside the link's accessible name. */}
+          <span aria-live="polite" role="status" className="sr-only">
+            {count > 0
+              ? `${count} ${count === 1 ? "producto" : "productos"} en el carrito`
+              : ""}
+          </span>
           <Link
             href="/carrito"
             aria-label={`Carrito, ${count} ${count === 1 ? "producto" : "productos"}`}

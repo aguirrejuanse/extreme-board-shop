@@ -35,7 +35,7 @@ export async function generateMetadata({
 
   return {
     title: `${product.name} — ${product.brand}`,
-    description: product.shortDescription,
+    description: `${product.shortDescription} ${formatPrice(product.price)} · Envíos a todo el país.`,
     alternates: {
       canonical: `/productos/${product.category}/${product.slug}`,
     },
@@ -65,20 +65,86 @@ export default async function ProductPage({
     .filter((p) => p.id !== product.id)
     .slice(0, 4);
 
+  const productUrl = `${SITE_URL}/productos/${product.category}/${product.slug}`;
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    brand: { "@type": "Brand", name: product.brand },
-    description: product.description,
-    image: placeholderImage(product.imageSeed, 800, 800, product.name),
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "ARS",
-      price: product.price,
-      availability: "https://schema.org/InStock",
-      url: `${SITE_URL}/productos/${product.category}/${product.slug}`,
-    },
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Inicio",
+            item: SITE_URL,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: category.name,
+            item: `${SITE_URL}/productos/${category.slug}`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: product.name,
+            item: productUrl,
+          },
+        ],
+      },
+      {
+        "@type": "Product",
+        name: product.name,
+        sku: product.id,
+        category: category.name,
+        brand: { "@type": "Brand", name: product.brand },
+        description: product.description,
+        image: placeholderImage(product.imageSeed, 800, 800, product.name),
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "ARS",
+          price: product.price,
+          priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .slice(0, 10),
+          availability: "https://schema.org/InStock",
+          itemCondition: "https://schema.org/NewCondition",
+          url: productUrl,
+          shippingDetails: {
+            "@type": "OfferShippingDetails",
+            shippingDestination: {
+              "@type": "DefinedRegion",
+              addressCountry: "AR",
+            },
+            deliveryTime: {
+              "@type": "ShippingDeliveryTime",
+              handlingTime: {
+                "@type": "QuantitativeValue",
+                minValue: 0,
+                maxValue: 1,
+                unitCode: "DAY",
+              },
+              transitTime: {
+                "@type": "QuantitativeValue",
+                minValue: 1,
+                maxValue: 5,
+                unitCode: "DAY",
+              },
+            },
+          },
+          hasMerchantReturnPolicy: {
+            "@type": "MerchantReturnPolicy",
+            applicableCountry: "AR",
+            returnPolicyCategory:
+              "https://schema.org/MerchantReturnFiniteReturnWindow",
+            merchantReturnDays: 10,
+            returnMethod: "https://schema.org/ReturnByMail",
+            returnFees: "https://schema.org/FreeReturn",
+          },
+        },
+      },
+    ],
   };
 
   return (
