@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
+import { getInstallmentPlan } from "@/lib/payments";
 import { placeholderImage } from "@/lib/image";
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -50,6 +51,10 @@ export default function ProductCard({ product }: { product: Product }) {
               {formatPrice(product.compareAtPrice)}
             </span>
           )}
+        </p>
+        <p className="text-[11px] text-paper-dim">
+          {getInstallmentPlan(product.price).count} cuotas sin interés de{" "}
+          {formatPrice(getInstallmentPlan(product.price).perInstallment)}
         </p>
       </div>
     </Link>

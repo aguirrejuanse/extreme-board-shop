@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { categories, getCategoryBySlug } from "@/data/categories";
 import { getProductBySlug, getProductsByCategory, products } from "@/data/products";
 import { formatPrice } from "@/lib/format";
+import { getInstallmentPlan } from "@/lib/payments";
 import { placeholderImage } from "@/lib/image";
 import { SITE_URL } from "@/lib/site";
 import AddToCartForm from "@/components/add-to-cart-form";
@@ -234,8 +235,9 @@ export default async function ProductPage({
             )}
           </div>
           <p className="mt-1 text-xs text-paper-dim">
-            3 cuotas sin interés de {formatPrice(Math.round(product.price / 3))}{" "}
-            · Precio de contado
+            {getInstallmentPlan(product.price).count} cuotas sin interés de{" "}
+            {formatPrice(getInstallmentPlan(product.price).perInstallment)} ·
+            Precio de contado
           </p>
 
           <ul className="mt-6 flex flex-col gap-1.5 text-xs text-paper-dim">

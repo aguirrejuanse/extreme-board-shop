@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { categories } from "@/data/categories";
 import { useCartStore, cartCount } from "@/store/cart-store";
 import { useHasHydrated } from "@/hooks/use-hydrated";
+import { FREE_SHIPPING_THRESHOLD } from "@/lib/payments";
+import { formatPrice } from "@/lib/format";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,7 +34,8 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-line bg-ink/95 backdrop-blur">
       <div className="bg-acid text-ink">
         <p className="mx-auto max-w-7xl overflow-hidden px-4 py-1.5 text-center text-[11px] font-semibold tracking-[0.18em] uppercase sm:text-xs">
-          Envíos a Mendoza, San Juan y todo el país · Retirá en nuestro local de Ciudad
+          Envío gratis desde {formatPrice(FREE_SHIPPING_THRESHOLD)} · Hasta 12
+          cuotas sin interés · Retiro gratis en local
         </p>
       </div>
 
@@ -51,7 +54,7 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav className="hidden items-center gap-5 lg:flex">
           {categories.map((category) => (
             <Link
               key={category.slug}
@@ -61,6 +64,24 @@ export default function Header() {
               {category.name}
             </Link>
           ))}
+          <Link
+            href="/marcas"
+            className="text-sm font-semibold tracking-wide text-paper-dim uppercase transition-colors hover:text-acid"
+          >
+            Marcas
+          </Link>
+          <Link
+            href="/ofertas"
+            className="text-sm font-semibold tracking-wide text-blaze uppercase transition-colors hover:text-paper"
+          >
+            Sale
+          </Link>
+          <Link
+            href="/locales"
+            className="text-sm font-semibold tracking-wide text-paper-dim uppercase transition-colors hover:text-acid"
+          >
+            Locales
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">
@@ -114,6 +135,21 @@ export default function Header() {
                   className="block py-3 text-sm font-semibold tracking-wide text-paper uppercase hover:text-acid"
                 >
                   {category.name}
+                </Link>
+              </li>
+            ))}
+            {[
+              { href: "/marcas", label: "Marcas" },
+              { href: "/ofertas", label: "Sale" },
+              { href: "/locales", label: "Locales" },
+            ].map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block py-3 text-sm font-semibold tracking-wide text-paper uppercase hover:text-acid"
+                >
+                  {link.label}
                 </Link>
               </li>
             ))}

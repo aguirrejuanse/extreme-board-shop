@@ -379,3 +379,28 @@ export function getBrands(productList: Product[]): string[] {
 export function getAllBrands(): string[] {
   return getBrands(products);
 }
+
+export function brandSlug(brand: string): string {
+  return brand
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export function getBrandBySlug(slug: string): string | undefined {
+  return getAllBrands().find((brand) => brandSlug(brand) === slug);
+}
+
+export function getProductsByBrand(brand: string): Product[] {
+  return products.filter((product) => product.brand === brand);
+}
+
+export function getSaleProducts(): Product[] {
+  return products
+    .filter((product) => product.compareAtPrice !== undefined)
+    .sort(
+      (a, b) =>
+        1 - b.price / (b.compareAtPrice ?? b.price) -
+        (1 - a.price / (a.compareAtPrice ?? a.price))
+    );
+}

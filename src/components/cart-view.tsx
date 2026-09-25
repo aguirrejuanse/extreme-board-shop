@@ -2,16 +2,33 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState, type FormEvent } from "react";
 import { useCartStore, cartTotal, MAX_LINE_QUANTITY } from "@/store/cart-store";
 import { useHasHydrated } from "@/hooks/use-hydrated";
 import { formatPrice } from "@/lib/format";
 import { placeholderImage } from "@/lib/image";
+import {
+  estimateShipping,
+  getInstallmentPlan,
+  FREE_SHIPPING_THRESHOLD,
+  type ShippingEstimate,
+} from "@/lib/payments";
 
 export default function CartView() {
   const items = useCartStore((state) => state.items);
   const setQuantity = useCartStore((state) => state.setQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
   const hydrated = useHasHydrated();
+  const [cp, setCp] = useState("");
+  const [estimate, setEstimate] = useState<ShippingEstimate | null>(null);
+  const [cpError, setCpError] = useState(false);
+
+  function handleEstimate(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const result = estimateShipping(cp);
+    setEstimate(result);
+    setCpError(result === null);
+  }
 
   if (!hydrated) {
     return (
@@ -41,6 +58,11 @@ export default function CartView() {
   }
 
   const total = cartTotal(items);
+  const freeShipping = total >= FREE_SHIPPING_THRESHOLD;
+  const missingForFree = FREE_SHIPPING_THRESHOLD - total;
+  const progress = Math.min(100, (total / FREE_SHIPPING_THRESHOLD) * 100);
+  const installments = getInstallmentPlan(total);
+  const shippingCost = estimate ? (freeShipping ? 0 : estimate.price) : null;
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
@@ -136,6 +158,34 @@ export default function CartView() {
         <h2 className="font-display text-2xl tracking-tight text-paper">
           Resumen
         </h2>
+
+        {freeShipping ? (
+          <p className="mt-4 rounded-xl bg-success-soft px-3 py-2 text-xs font-semibold text-success">
+            ¡Tenés envío gratis!
+          </p>
+        ) : (
+          <div className="mt-4">
+            <p className="text-xs font-semibold text-paper-dim">
+              Te faltan{" "}
+              <span className="text-blaze">{formatPrice(missingForFree)}</span>{" "}
+              para el envío gratis
+            </p>
+            <div
+              role="progressbar"
+              aria-valuenow={Math.round(progress)}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Progreso hacia envío gratis"
+              className="mt-2 h-1.5 overflow-hidden rounded-full bg-ink"
+            >
+              <div
+                className="h-full rounded-full bg-blaze transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+        )}
+
         <dl className="mt-4 space-y-2 text-sm">
           <div className="flex justify-between text-paper-dim">
             <dt>Subtotal</dt>
@@ -143,13 +193,70 @@ export default function CartView() {
           </div>
           <div className="flex justify-between text-paper-dim">
             <dt>Envío</dt>
-            <dd>A calcular en checkout</dd>
+            <dd>
+              {freeShipping
+                ? "Gratis"
+                : shippingCost !== null
+                  ? formatPrice(shippingCost)
+                  : "A calcular en checkout"}
+            </dd>
           </div>
         </dl>
+
+        <form onSubmit={handleEstimate} className="mt-3">
+          <label
+            htmlFor="cp"
+            className="text-[11px] font-semibold tracking-wide text-paper-dim uppercase"
+          >
+            Calculá tu envío
+          </label>
+          <div className="mt-1.5 flex gap-2">
+            <input
+              id="cp"
+              inputMode="numeric"
+              maxLength={4}
+              placeholder="CP 5500"
+              value={cp}
+              onChange={(event) => {
+                setCp(event.target.value);
+                setCpError(false);
+              }}
+              className={`w-full rounded-lg border bg-ink px-3 py-2 text-sm text-paper placeholder:text-paper-dim/60 focus:outline-none ${
+                cpError
+                  ? "border-blaze focus:border-blaze"
+                  : "border-line focus:border-acid"
+              }`}
+            />
+            <button
+              type="submit"
+              className="cursor-pointer rounded-lg border border-line px-3 py-2 text-xs font-bold tracking-wide text-paper uppercase transition-colors hover:border-acid hover:text-acid"
+            >
+              Calcular
+            </button>
+          </div>
+          {cpError && (
+            <p className="mt-1.5 text-[11px] font-semibold text-blaze">
+              Ingresá un código postal de 4 dígitos
+            </p>
+          )}
+          <a
+            href="https://www.correoargentino.com.ar/formularios/cpa"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1.5 inline-block text-[11px] text-paper-dim underline underline-offset-2 hover:text-paper"
+          >
+            No sé mi código postal
+          </a>
+        </form>
+
         <div className="mt-4 flex justify-between border-t border-line pt-4 font-display text-2xl tracking-tight text-paper">
           <span>Total</span>
-          <span>{formatPrice(total)}</span>
+          <span>{formatPrice(total + (shippingCost ?? 0))}</span>
         </div>
+        <p className="mt-1 text-right text-xs text-paper-dim">
+          o {installments.count} cuotas sin interés de{" "}
+          {formatPrice(installments.perInstallment)}
+        </p>
         <Link
           href="/checkout"
           className="mt-6 block rounded-full bg-acid px-6 py-3.5 text-center text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5"
