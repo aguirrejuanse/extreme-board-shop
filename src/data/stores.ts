@@ -9,11 +9,10 @@ export interface Store {
 }
 
 /* Real store list from extremeboardshop.com.ar + the Costanera outlet
-   announced mid-2025. Phone numbers are not published per store — cards
-   link WhatsApp to the main published line (0261 429-0773); verify with
-   the client before shipping for real. */
+   announced mid-2025. PHONE is the published Av. Colón line; WHATSAPP is
+   the commercial number from their official Instagram bio (@boardshopextreme). */
 export const PHONE = "+54 261 429-0773";
-export const WHATSAPP = "5492614290773";
+export const WHATSAPP = "542612783772";
 
 export const stores: Store[] = [
   {
