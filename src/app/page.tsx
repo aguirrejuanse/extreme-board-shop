@@ -1,11 +1,13 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { categories } from "@/data/categories";
 import { getFeaturedProducts, getAllBrands } from "@/data/products";
+import { PHONE, stores } from "@/data/stores";
 import CategoryCard from "@/components/category-card";
 import ProductCard from "@/components/product-card";
-import { placeholderImage } from "@/lib/image";
+import HeroCarousel from "@/components/hero-carousel";
+
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Skate, Snow y Streetwear en Mendoza y San Juan",
@@ -18,20 +20,54 @@ export const metadata: Metadata = {
 
 const brands = getAllBrands();
 
+// Local SEO: one SportingGoodsStore node per physical location so every
+// branch is eligible for local pack / "cerca de mí" results, grouped
+// under the same parent Organization.
+const storesJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#org`,
+      name: "Extreme Board Shop",
+      url: SITE_URL,
+      logo: `${SITE_URL}/logo.jpg`,
+    },
+    ...stores.map((store) => ({
+      "@type": "SportingGoodsStore",
+      parentOrganization: { "@id": `${SITE_URL}/#org` },
+      name: `Extreme Board Shop — ${store.name}`,
+      telephone: PHONE,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: store.address,
+        addressLocality: store.city,
+        addressRegion: store.city,
+        addressCountry: "AR",
+      },
+      openingHours: store.hoursSchema,
+    })),
+  ],
+};
+
 export default function HomePage() {
   const featured = getFeaturedProducts();
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(storesJsonLd) }}
+      />
       {/* HERO */}
       <section className="grain diagonal-edge relative overflow-hidden bg-ink-soft pb-24">
         <div className="pointer-events-none absolute inset-0 opacity-25">
-          <Image
-            src={placeholderImage("hero-cordillera-cuyo", 1600, 1200)}
-            alt=""
-            fill
-            priority
-            className="object-cover"
+          <HeroCarousel
+            images={[
+              "/images/hero.webp",
+              "/images/hero-skate.webp",
+              "/images/hero-snow.webp",
+            ]}
           />
         </div>
 
@@ -62,7 +98,7 @@ export default function HomePage() {
           >
             <Link
               href="/productos/skate"
-              className="rounded-full bg-acid px-7 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(215,255,59,0.6)]"
+              className="rounded-full bg-acid px-7 py-3.5 text-sm font-bold tracking-wide text-ink uppercase transition-transform hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(255,45,140,0.6)]"
             >
               Ver Skate
             </Link>

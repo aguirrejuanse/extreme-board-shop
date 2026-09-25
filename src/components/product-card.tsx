@@ -2,9 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
-import { placeholderImage } from "@/lib/image";
+import { getInstallmentPlan } from "@/lib/payments";
 
 export default function ProductCard({ product }: { product: Product }) {
+  const discount = product.compareAtPrice
+    ? Math.round((1 - product.price / product.compareAtPrice) * 100)
+    : null;
+
   return (
     <Link
       href={`/productos/${product.category}/${product.slug}`}
@@ -12,7 +16,7 @@ export default function ProductCard({ product }: { product: Product }) {
     >
       <div className="relative aspect-square overflow-hidden bg-ink">
         <Image
-          src={placeholderImage(product.imageSeed, 600, 600, product.name)}
+          src={product.image}
           alt={`${product.brand} ${product.name}`}
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
@@ -21,6 +25,11 @@ export default function ProductCard({ product }: { product: Product }) {
         {product.isNew && (
           <span className="absolute top-3 left-3 rounded-full bg-acid px-2.5 py-1 text-[10px] font-bold tracking-wide text-ink uppercase">
             Nuevo
+          </span>
+        )}
+        {discount !== null && (
+          <span className="absolute top-3 right-3 rounded-full bg-blaze px-2.5 py-1 text-[10px] font-bold tracking-wide text-ink uppercase">
+            -{discount}%
           </span>
         )}
       </div>
@@ -32,8 +41,19 @@ export default function ProductCard({ product }: { product: Product }) {
         <h3 className="text-sm leading-snug font-semibold text-paper">
           {product.name}
         </h3>
-        <p className="mt-auto pt-3 font-display text-lg tracking-wide text-paper">
-          {formatPrice(product.price)}
+        <p className="mt-auto flex items-baseline gap-2 pt-3">
+          <span className="font-display text-lg tracking-wide text-paper">
+            {formatPrice(product.price)}
+          </span>
+          {product.compareAtPrice && (
+            <span className="text-xs text-paper-dim line-through">
+              {formatPrice(product.compareAtPrice)}
+            </span>
+          )}
+        </p>
+        <p className="text-[11px] text-paper-dim">
+          {getInstallmentPlan(product.price).count} cuotas sin interés de{" "}
+          {formatPrice(getInstallmentPlan(product.price).perInstallment)}
         </p>
       </div>
     </Link>

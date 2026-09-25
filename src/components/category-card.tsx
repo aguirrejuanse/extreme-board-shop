@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Category } from "@/lib/types";
-import { placeholderImage } from "@/lib/image";
 
 export default function CategoryCard({ category }: { category: Category }) {
   return (
@@ -10,7 +9,7 @@ export default function CategoryCard({ category }: { category: Category }) {
       className="group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-2xl border border-line"
     >
       <Image
-        src={placeholderImage(category.imageSeed, 500, 640)}
+        src={category.image}
         alt={category.name}
         fill
         sizes="(min-width: 1024px) 20vw, 50vw"
@@ -21,7 +20,9 @@ export default function CategoryCard({ category }: { category: Category }) {
         <p className="font-display text-2xl tracking-tight text-paper">
           {category.name}
         </p>
-        <p className="mt-1 text-xs text-paper-dim opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        {/* Always visible below lg (no reliable hover on touch); on desktop it
+            keeps the reveal-on-hover treatment. */}
+        <p className="mt-1 text-xs text-paper-dim transition-opacity duration-300 lg:opacity-0 lg:group-hover:opacity-100">
           {category.tagline}
         </p>
       </div>

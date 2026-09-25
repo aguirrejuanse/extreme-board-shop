@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { categories } from "@/data/categories";
+import NewsletterForm from "@/components/newsletter-form";
 
 export default function Footer() {
   return (
@@ -13,6 +14,14 @@ export default function Footer() {
             Skate, snow y streetwear con identidad cuyana. Desde Mendoza y San
             Juan para toda la Argentina.
           </p>
+          <div className="mt-5 max-w-xs">
+            <p className="text-xs font-bold tracking-[0.18em] text-acid uppercase">
+              Novedades y ofertas
+            </p>
+            <div className="mt-3">
+              <NewsletterForm />
+            </div>
+          </div>
         </div>
 
         <div>
@@ -35,12 +44,29 @@ export default function Footer() {
 
         <div>
           <h2 className="text-xs font-bold tracking-[0.18em] text-acid uppercase">
-            Locales
+            Tienda
           </h2>
-          <ul className="mt-4 space-y-2 text-sm text-paper-dim">
-            <li>Mendoza Capital — Av. San Martín 1234</li>
-            <li>San Juan Capital — Av. Libertador 890</li>
-            <li>Lun a Sáb, 10 a 20 hs</li>
+          <ul className="mt-4 space-y-2">
+            <li>
+              <Link href="/marcas" className="text-sm text-paper-dim transition-colors hover:text-paper">
+                Marcas
+              </Link>
+            </li>
+            <li>
+              <Link href="/ofertas" className="text-sm text-paper-dim transition-colors hover:text-paper">
+                Sale
+              </Link>
+            </li>
+            <li>
+              <Link href="/locales" className="text-sm text-paper-dim transition-colors hover:text-paper">
+                Locales
+              </Link>
+            </li>
+            <li>
+              <Link href="/carrito" className="text-sm text-paper-dim transition-colors hover:text-paper">
+                Mi carrito
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -50,14 +76,34 @@ export default function Footer() {
           </h2>
           <ul className="mt-4 space-y-2">
             <li>
-              <Link href="/carrito" className="text-sm text-paper-dim transition-colors hover:text-paper">
-                Mi carrito
+              <Link href="/ayuda#envios" className="text-sm text-paper-dim transition-colors hover:text-paper">
+                Envíos
               </Link>
             </li>
             <li>
-              <Link href="/checkout" className="text-sm text-paper-dim transition-colors hover:text-paper">
-                Finalizar compra
+              <Link href="/ayuda#devoluciones" className="text-sm text-paper-dim transition-colors hover:text-paper">
+                Cambios y devoluciones
               </Link>
+            </li>
+            <li>
+              <Link href="/ayuda#arrepentimiento" className="text-sm text-paper-dim transition-colors hover:text-paper">
+                Botón de arrepentimiento
+              </Link>
+            </li>
+            <li>
+              <Link href="/ayuda#faq" className="text-sm text-paper-dim transition-colors hover:text-paper">
+                Preguntas frecuentes
+              </Link>
+            </li>
+            <li>
+              <a
+                href="https://www.argentina.gob.ar/produccion/defensadelconsumidor/formulario"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-paper-dim transition-colors hover:text-paper"
+              >
+                Defensa del Consumidor
+              </a>
             </li>
           </ul>
         </div>

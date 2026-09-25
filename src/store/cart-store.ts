@@ -17,7 +17,11 @@ export interface CartItem {
   name: string;
   brand: string;
   price: number;
-  imageSeed: string;
+  /** New items store the real photo path; lines persisted before the image
+      bank shipped only have imageSeed, so cart-view falls back to the SVG
+      placeholder for those. */
+  image?: string;
+  imageSeed?: string;
   variantId?: string;
   variantLabel?: string;
   quantity: number;

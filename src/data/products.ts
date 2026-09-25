@@ -20,7 +20,7 @@ export const products: Product[] = [
     shortDescription: "Completa lista para salir a rodar, maple canadiense de 7 capas.",
     description:
       "La Section es la completa de entrada que no te deja mal parado en ningún terreno: street, plaza o rampa. Deck de maple canadiense de 7 capas, trucks resistentes y ruedas de dureza media para rodar en cualquier superficie de Mendoza o San Juan sin sorpresas.",
-    imageSeed: "element-section-80",
+    image: "/images/products/element-section-completa-8-0.webp",
     featured: true,
   },
   {
@@ -33,7 +33,7 @@ export const products: Product[] = [
     shortDescription: "El clásico dot de Santa Cruz en una completa premium.",
     description:
       "Con el gráfico dot que ya es parte de la historia del skate, esta completa de 8.25\" combina un deck resistente con hardware de calidad para andar en la calle o en el skatepark todos los días de la semana.",
-    imageSeed: "santacruz-classicdot-825",
+    image: "/images/products/santa-cruz-classic-dot-completa-8-25.webp",
     isNew: true,
   },
   {
@@ -43,10 +43,11 @@ export const products: Product[] = [
     brand: "Santa Cruz",
     category: "skate",
     price: 95000,
+    compareAtPrice: 118000,
     shortDescription: "Deck solo, para armar tu setup a tu gusto.",
     description:
       "El gráfico Screaming Hand original en un deck de 8 capas de maple prensado, con el pop y la durabilidad que necesitás para trucos técnicos. Ideal si ya tenés trucks y ruedas y solo buscás renovar la madera.",
-    imageSeed: "santacruz-screaminghand",
+    image: "/images/products/santa-cruz-screaming-hand-deck-8-375.webp",
   },
   {
     id: "skate-004",
@@ -58,7 +59,7 @@ export const products: Product[] = [
     shortDescription: "El estándar de la industria en resistencia y giro.",
     description:
       "Los Stage 11 son el truck más probado del skate mundial. Base de aleación de alta resistencia, geometría pensada para grindar sin drama y un giro parejo que se banca cualquier terreno cuyano.",
-    imageSeed: "independent-stage11",
+    image: "/images/products/independent-stage-11-trucks.webp",
   },
   {
     id: "skate-005",
@@ -67,10 +68,11 @@ export const products: Product[] = [
     brand: "Spitfire",
     category: "skate",
     price: 45000,
+    compareAtPrice: 56000,
     shortDescription: "Uretano de fórmula competitiva, 99a de dureza.",
     description:
       "Las Formula Four son las ruedas más rápidas y duraderas que vas a encontrar para street y park. Uretano de alto rendimiento que mantiene el filo durante mucho más tiempo que una rueda común.",
-    imageSeed: "spitfire-formulafour",
+    image: "/images/products/spitfire-formula-four-52mm.webp",
   },
   {
     id: "skate-006",
@@ -82,7 +84,7 @@ export const products: Product[] = [
     shortDescription: "El rodamiento más vendido del planeta skate.",
     description:
       "Los Bones Reds son sinónimo de velocidad accesible: rodamientos de acero de precisión reducida que aguantan polvo, agua y el trote diario sin perder velocidad.",
-    imageSeed: "bones-reds",
+    image: "/images/products/bones-reds-rodamientos.webp",
   },
   {
     id: "skate-007",
@@ -94,7 +96,7 @@ export const products: Product[] = [
     shortDescription: "Agarre parejo de borde a borde, fácil de instalar.",
     description:
       "La lija más elegida por skaters de todos los niveles. Adhesivo fuerte, grano parejo y perforado para instalar sin burbujas en dos minutos.",
-    imageSeed: "mob-griptape",
+    image: "/images/products/mob-grip-tape.webp",
   },
 
   // ---------- SNOW ----------
@@ -108,7 +110,7 @@ export const products: Product[] = [
     shortDescription: "La tabla insignia de Burton, versátil para toda la montaña.",
     description:
       "La Custom Flying V es la tabla más icónica de Burton: perfil híbrido camber-rocker que responde en pista y flota en polvo. Pensada para el andarivel que vas a encontrar en Las Leñas o Penitentes en temporada alta.",
-    imageSeed: "burton-custom-flyingv",
+    image: "/images/products/burton-custom-flying-v-158.webp",
     featured: true,
   },
   {
@@ -121,7 +123,7 @@ export const products: Product[] = [
     shortDescription: "Freestyle friendly, ideal para parque y freeride liviano.",
     description:
       "La Process es la elección de quienes buscan una tabla ágil para el parque sin resignar estabilidad en pista abierta. Core liviano y flex medio que perdona errores de aterrizaje.",
-    imageSeed: "burton-process-flyingv",
+    image: "/images/products/burton-process-flying-v-154.webp",
     isNew: true,
   },
   {
@@ -134,7 +136,7 @@ export const products: Product[] = [
     shortDescription: "Ajuste rápido y respuesta directa para todo tipo de terreno.",
     description:
       "Las Cartel X ofrecen la mejor relación entre comodidad y respuesta de la línea Burton. Sistema de ajuste rápido para no perder tiempo en la fila del andarivel.",
-    imageSeed: "burton-cartelx",
+    image: "/images/products/burton-cartel-x-bindings.webp",
   },
   {
     id: "snow-004",
@@ -146,7 +148,7 @@ export const products: Product[] = [
     shortDescription: "Confort de entrada con soporte para todo el día en la montaña.",
     description:
       "Las Lashed son las botas más elegidas por quienes recién arrancan en el snowboard: liner térmico, buen soporte de tobillo y un precio que no te deja afuera de la temporada.",
-    imageSeed: "thirtytwo-lashed",
+    image: "/images/products/thirtytwo-lashed-botas.webp",
     variantLabel: "Talle",
     variants: BOTA_SNOW_TALLES,
   },
@@ -160,7 +162,7 @@ export const products: Product[] = [
     shortDescription: "Lente magnético intercambiable y visión sin distorsión.",
     description:
       "Las Anon M4 usan un sistema de lente magnético que se cambia en segundos según cambie la luz en la montaña. Doble lente térmica anti-vaho para no perderte nada de la bajada.",
-    imageSeed: "anon-m4-goggles",
+    image: "/images/products/anon-m4-goggles.webp",
   },
 
   // ---------- ROPA ----------
@@ -174,7 +176,7 @@ export const products: Product[] = [
     shortDescription: "Campera técnica impermeable para nieve y días de frío intenso.",
     description:
       "La Hydro Puff combina relleno sintético con una membrana impermeable para bancarse una jornada entera en la nieve o una noche de invierno en la calle. Corte relajado, capucha ajustable.",
-    imageSeed: "volcom-hydropuff",
+    image: "/images/products/volcom-hydro-puff-jacket.webp",
     variantLabel: "Talle",
     variants: ROPA_TALLES,
     featured: true,
@@ -189,7 +191,7 @@ export const products: Product[] = [
     shortDescription: "Pantalón técnico para snowboard, costuras selladas.",
     description:
       "Tecnología Dryride que repele agua y viento sin perder transpirabilidad. Costuras selladas y refuerzos en zona de bota, pensado para las bajadas más largas.",
-    imageSeed: "burton-dryride-pants",
+    image: "/images/products/burton-dryride-pants.webp",
     variantLabel: "Talle",
     variants: ROPA_TALLES,
   },
@@ -203,7 +205,7 @@ export const products: Product[] = [
     shortDescription: "Buzo de algodón grueso, el básico de todo skater.",
     description:
       "El Cornell es el buzo que no puede faltar en el placard: algodón grueso, bolsillo canguro y capucha forrada. Cómodo para andar en tabla y para el día a día.",
-    imageSeed: "element-cornell-hoodie",
+    image: "/images/products/element-cornell-hoodie.webp",
     variantLabel: "Talle",
     variants: ROPA_TALLES,
     isNew: true,
@@ -215,10 +217,11 @@ export const products: Product[] = [
     brand: "Quiksilver",
     category: "ropa",
     price: 24000,
+    compareAtPrice: 30000,
     shortDescription: "Remera de algodón peinado, corte relajado.",
     description:
       "Básico de todos los días: algodón peinado de 180g, estampa al frente y corte que no aprieta. Aguanta lavado tras lavado sin perder forma.",
-    imageSeed: "quiksilver-everyday-tee",
+    image: "/images/products/quiksilver-everyday-tee.webp",
     variantLabel: "Talle",
     variants: ROPA_TALLES,
   },
@@ -232,7 +235,7 @@ export const products: Product[] = [
     shortDescription: "Polar liviano ideal para las mañanas frías de Cuyo.",
     description:
       "Un polar liviano que suma calor sin volumen de más. Perfecto para usar solo en otoño o como capa media bajo la campera en invierno.",
-    imageSeed: "roxy-billie-polar",
+    image: "/images/products/roxy-billie-polar.webp",
     variantLabel: "Talle",
     variants: ROPA_TALLES,
   },
@@ -248,7 +251,7 @@ export const products: Product[] = [
     shortDescription: "El clásico de la franja lateral que nunca pasa de moda.",
     description:
       "La Old Skool es la zapatilla que definió la estética skate desde 1977. Suela waffle para máximo agarre en la tabla y una durabilidad que aguanta rodadas y asfalto por igual.",
-    imageSeed: "vans-oldskool",
+    image: "/images/products/vans-old-skool.webp",
     variantLabel: "Talle",
     variants: CALZADO_TALLES,
     featured: true,
@@ -263,7 +266,7 @@ export const products: Product[] = [
     shortDescription: "Caña alta con refuerzo de tobillo para skate serio.",
     description:
       "La versión de caña alta de la Old Skool, pensada para quienes buscan protección extra de tobillo sin resignar el estilo callejero de siempre.",
-    imageSeed: "vans-sk8hi",
+    image: "/images/products/vans-sk8-hi.webp",
     variantLabel: "Talle",
     variants: CALZADO_TALLES,
   },
@@ -277,7 +280,7 @@ export const products: Product[] = [
     shortDescription: "La reedición premium del modelo más icónico del calzado urbano.",
     description:
       "Materiales más nobles y una suela con mejor amortiguación que la Chuck original, manteniendo la silueta que se volvió uniforme urbano en todo el mundo.",
-    imageSeed: "converse-chuck70",
+    image: "/images/products/converse-chuck-70.webp",
     variantLabel: "Talle",
     variants: CALZADO_TALLES,
     isNew: true,
@@ -289,10 +292,11 @@ export const products: Product[] = [
     brand: "DC Shoes",
     category: "calzado",
     price: 68000,
+    compareAtPrice: 84000,
     shortDescription: "Base ancha y suela de goma vulcanizada para skate técnico.",
     description:
       "Diseñada junto a skaters profesionales, la Court Graffik prioriza estabilidad y sensibilidad sobre la tabla, con una suela vulcanizada que responde en cada truco.",
-    imageSeed: "dc-courtgraffik",
+    image: "/images/products/dc-court-graffik.webp",
     variantLabel: "Talle",
     variants: CALZADO_TALLES,
   },
@@ -308,7 +312,7 @@ export const products: Product[] = [
     shortDescription: "Gorra estructurada con logo bordado, ajuste snapback.",
     description:
       "Gorra de seis paneles con frente estructurado y logo Stone bordado. Cierre snapback ajustable para que quede a medida sin importar el corte de pelo del día.",
-    imageSeed: "volcom-stone-snapback",
+    image: "/images/products/volcom-stone-snapback.webp",
   },
   {
     id: "accesorios-002",
@@ -320,7 +324,7 @@ export const products: Product[] = [
     shortDescription: "25 litros con compartimento para notebook y porta tabla.",
     description:
       "Pensada para el día completo: compartimento acolchado para notebook, bolsillo de acceso rápido y sistema de sujeción para llevar la tabla cuando el auto queda lejos.",
-    imageSeed: "burton-multipath-mochila",
+    image: "/images/products/burton-multipath-mochila.webp",
     featured: true,
   },
   {
@@ -333,7 +337,7 @@ export const products: Product[] = [
     shortDescription: "Malla trasera transpirable, frente con logo clásico.",
     description:
       "La trucker de toda la vida: frente de algodón con logo bordado y malla trasera que deja circular el aire en los días de calor cuyano.",
-    imageSeed: "quiksilver-trucker",
+    image: "/images/products/quiksilver-trucker-cap.webp",
   },
   {
     id: "accesorios-004",
@@ -342,10 +346,11 @@ export const products: Product[] = [
     brand: "VonZipper",
     category: "accesorios",
     price: 32000,
+    compareAtPrice: 40000,
     shortDescription: "Lente polarizado con protección UV400.",
     description:
       "Marco liviano de acetato y lente polarizado con protección UV400, ideal para los días de sol fuerte tanto en la ciudad como en la montaña.",
-    imageSeed: "vonzipper-elmore",
+    image: "/images/products/vonzipper-anteojos-sol.webp",
     isNew: true,
   },
 ];
@@ -373,4 +378,57 @@ export function getBrands(productList: Product[]): string[] {
 
 export function getAllBrands(): string[] {
   return getBrands(products);
+}
+
+export function brandSlug(brand: string): string {
+  return brand
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export function getBrandBySlug(slug: string): string | undefined {
+  return getAllBrands().find((brand) => brandSlug(brand) === slug);
+}
+
+export function getProductsByBrand(brand: string): Product[] {
+  return products.filter((product) => product.brand === brand);
+}
+
+/**
+ * Representative photo for each brand landing + /marcas card. Most reuse
+ * that brand's product shot (guaranteed on-brand); surf brands get a
+ * dedicated lifestyle photo in /images/brands.
+ */
+const BRAND_IMAGES: Record<string, string> = {
+  Element: "/images/products/element-section-completa-8-0.webp",
+  "Santa Cruz": "/images/products/santa-cruz-classic-dot-completa-8-25.webp",
+  Independent: "/images/products/independent-stage-11-trucks.webp",
+  Spitfire: "/images/products/spitfire-formula-four-52mm.webp",
+  Bones: "/images/products/bones-reds-rodamientos.webp",
+  "Mob Grip": "/images/products/mob-grip-tape.webp",
+  Burton: "/images/products/burton-custom-flying-v-158.webp",
+  ThirtyTwo: "/images/products/thirtytwo-lashed-botas.webp",
+  Anon: "/images/products/anon-m4-goggles.webp",
+  Volcom: "/images/products/volcom-hydro-puff-jacket.webp",
+  Quiksilver: "/images/brands/quiksilver.webp",
+  Roxy: "/images/brands/roxy.webp",
+  Vans: "/images/products/vans-old-skool.webp",
+  Converse: "/images/products/converse-chuck-70.webp",
+  "DC Shoes": "/images/products/dc-court-graffik.webp",
+  VonZipper: "/images/products/vonzipper-anteojos-sol.webp",
+};
+
+export function getBrandImage(brand: string): string {
+  return BRAND_IMAGES[brand] ?? getProductsByBrand(brand)[0]?.image ?? "";
+}
+
+export function getSaleProducts(): Product[] {
+  return products
+    .filter((product) => product.compareAtPrice !== undefined)
+    .sort(
+      (a, b) =>
+        1 - b.price / (b.compareAtPrice ?? b.price) -
+        (1 - a.price / (a.compareAtPrice ?? a.price))
+    );
 }

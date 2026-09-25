@@ -24,12 +24,16 @@ export default function CheckoutForm() {
   const clear = useCartStore((state) => state.clear);
   const hydrated = useHasHydrated();
   const [form, setForm] = useState<ShippingDetails>(initialForm);
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof ShippingDetails, string>>
+  >({});
   const [submitting, setSubmitting] = useState(false);
 
   const total = cartTotal(items);
 
   function update<K extends keyof ShippingDetails>(key: K, value: ShippingDetails[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+    setErrors((prev) => ({ ...prev, [key]: undefined }));
   }
 
   const requiredTextFields: (keyof ShippingDetails)[] = [
@@ -44,10 +48,16 @@ export default function CheckoutForm() {
     event.preventDefault();
     if (items.length === 0) return;
 
-    const hasBlankRequiredField = requiredTextFields.some(
-      (key) => form[key].trim().length === 0
-    );
-    if (hasBlankRequiredField) return;
+    const fieldErrors: Partial<Record<keyof ShippingDetails, string>> = {};
+    for (const key of requiredTextFields) {
+      if (form[key].trim().length === 0) {
+        fieldErrors[key] = "Completá este campo";
+      }
+    }
+    if (Object.keys(fieldErrors).length > 0) {
+      setErrors(fieldErrors);
+      return;
+    }
 
     setSubmitting(true);
 
@@ -103,6 +113,7 @@ export default function CheckoutForm() {
             value={form.fullName}
             onChange={(v) => update("fullName", v)}
             autoComplete="name"
+            error={errors.fullName}
           />
           <Field
             label="Email"
@@ -111,6 +122,7 @@ export default function CheckoutForm() {
             value={form.email}
             onChange={(v) => update("email", v)}
             autoComplete="email"
+            error={errors.email}
           />
           <Field
             label="Teléfono"
@@ -119,6 +131,7 @@ export default function CheckoutForm() {
             value={form.phone}
             onChange={(v) => update("phone", v)}
             autoComplete="tel"
+            error={errors.phone}
           />
           <Field
             label="Ciudad"
@@ -126,6 +139,7 @@ export default function CheckoutForm() {
             value={form.city}
             onChange={(v) => update("city", v)}
             autoComplete="address-level2"
+            error={errors.city}
           />
           <div className="sm:col-span-2">
             <Field
@@ -134,6 +148,7 @@ export default function CheckoutForm() {
               value={form.address}
               onChange={(v) => update("address", v)}
               autoComplete="street-address"
+              error={errors.address}
             />
           </div>
         </fieldset>
@@ -214,6 +229,7 @@ function Field({
   type = "text",
   required,
   autoComplete,
+  error,
 }: {
   label: string;
   value: string;
@@ -221,6 +237,7 @@ function Field({
   type?: string;
   required?: boolean;
   autoComplete?: string;
+  error?: string;
 }) {
   return (
     <label className="flex flex-col gap-1.5 text-xs font-semibold tracking-wide text-paper-dim uppercase">
@@ -230,9 +247,19 @@ function Field({
         required={required}
         autoComplete={autoComplete}
         value={value}
+        aria-invalid={Boolean(error) || undefined}
         onChange={(event) => onChange(event.target.value)}
-        className="rounded-lg border border-line bg-ink px-3.5 py-2.5 text-sm font-normal tracking-normal text-paper normal-case placeholder:text-paper-dim/60 focus:border-acid focus:outline-none"
+        className={`rounded-lg border bg-ink px-3.5 py-2.5 text-sm font-normal tracking-normal text-paper normal-case placeholder:text-paper-dim/60 focus:outline-none ${
+          error
+            ? "border-blaze focus:border-blaze"
+            : "border-line focus:border-acid"
+        }`}
       />
+      {error && (
+        <span className="text-[11px] font-semibold tracking-normal text-blaze normal-case">
+          {error}
+        </span>
+      )}
     </label>
   );
 }

@@ -2,22 +2,40 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { categories } from "@/data/categories";
 import { useCartStore, cartCount } from "@/store/cart-store";
 import { useHasHydrated } from "@/hooks/use-hydrated";
+import { FREE_SHIPPING_THRESHOLD } from "@/lib/payments";
+import { formatPrice } from "@/lib/format";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [bump, setBump] = useState(false);
   const items = useCartStore((state) => state.items);
   const hydrated = useHasHydrated();
   const count = hydrated ? cartCount(items) : 0;
+
+  // Pulse the badge when the cart grows. The ref stays null until hydration
+  // finishes so a pre-existing persisted cart doesn't pop on page load.
+  const prevCountRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!hydrated) return;
+    if (prevCountRef.current !== null && count > prevCountRef.current) {
+      setBump(true);
+      const timer = setTimeout(() => setBump(false), 450);
+      prevCountRef.current = count;
+      return () => clearTimeout(timer);
+    }
+    prevCountRef.current = count;
+  }, [count, hydrated]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-ink/95 backdrop-blur">
       <div className="bg-acid text-ink">
         <p className="mx-auto max-w-7xl overflow-hidden px-4 py-1.5 text-center text-[11px] font-semibold tracking-[0.18em] uppercase sm:text-xs">
-          Envíos a Mendoza, San Juan y todo el país · Retirá en nuestro local de Ciudad
+          Envío gratis desde {formatPrice(FREE_SHIPPING_THRESHOLD)} · Hasta 12
+          cuotas sin interés · Retiro gratis en local
         </p>
       </div>
 
@@ -36,7 +54,7 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav className="hidden items-center gap-5 lg:flex">
           {categories.map((category) => (
             <Link
               key={category.slug}
@@ -46,9 +64,35 @@ export default function Header() {
               {category.name}
             </Link>
           ))}
+          <Link
+            href="/marcas"
+            className="text-sm font-semibold tracking-wide text-paper-dim uppercase transition-colors hover:text-acid"
+          >
+            Marcas
+          </Link>
+          <Link
+            href="/ofertas"
+            className="text-sm font-semibold tracking-wide text-blaze uppercase transition-colors hover:text-paper"
+          >
+            Sale
+          </Link>
+          <Link
+            href="/locales"
+            className="text-sm font-semibold tracking-wide text-paper-dim uppercase transition-colors hover:text-acid"
+          >
+            Locales
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">
+          {/* Live region for screen readers: the visible badge is only
+              rendered when count > 0, so announcements need a persistent,
+              visually-hidden element outside the link's accessible name. */}
+          <span aria-live="polite" role="status" className="sr-only">
+            {count > 0
+              ? `${count} ${count === 1 ? "producto" : "productos"} en el carrito`
+              : ""}
+          </span>
           <Link
             href="/carrito"
             aria-label={`Carrito, ${count} ${count === 1 ? "producto" : "productos"}`}
@@ -57,7 +101,11 @@ export default function Header() {
             <CartIcon />
             <span className="hidden sm:inline">Carrito</span>
             {count > 0 && (
-              <span className="absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-blaze px-1 text-[11px] font-bold text-ink">
+              <span
+                className={`absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-blaze px-1 text-[11px] font-bold text-ink ${
+                  bump ? "animate-badge-pop" : ""
+                }`}
+              >
                 {count}
               </span>
             )}
@@ -87,6 +135,21 @@ export default function Header() {
                   className="block py-3 text-sm font-semibold tracking-wide text-paper uppercase hover:text-acid"
                 >
                   {category.name}
+                </Link>
+              </li>
+            ))}
+            {[
+              { href: "/marcas", label: "Marcas" },
+              { href: "/ofertas", label: "Sale" },
+              { href: "/locales", label: "Locales" },
+            ].map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block py-3 text-sm font-semibold tracking-wide text-paper uppercase hover:text-acid"
+                >
+                  {link.label}
                 </Link>
               </li>
             ))}
