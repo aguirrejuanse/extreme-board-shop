@@ -7,7 +7,7 @@ export const categories: Category[] = [
     tagline: "Rodá donde nadie te espera",
     description:
       "Tablas completas, decks, trucks, ruedas, rodamientos y grip tape para calle, rampa y todo lo que se cruce en el camino.",
-    imageSeed: "skate-cat-mza",
+    image: "/images/categories/skate.webp",
   },
   {
     slug: "snow",
@@ -15,7 +15,7 @@ export const categories: Category[] = [
     tagline: "Las Leñas y Penitentes te están esperando",
     description:
       "Tablas de snowboard, bindings, botas y accesorios para bajar la montaña como corresponde.",
-    imageSeed: "snow-cat-lasleñas",
+    image: "/images/categories/snow.webp",
   },
   {
     slug: "ropa",
@@ -23,7 +23,7 @@ export const categories: Category[] = [
     tagline: "Uniforme de calle y de montaña",
     description:
       "Buzos, remeras, camperas y pantalones pensados para el frío cuyano y el asfalto.",
-    imageSeed: "ropa-cat-cuyo",
+    image: "/images/categories/ropa.webp",
   },
   {
     slug: "calzado",
@@ -31,7 +31,7 @@ export const categories: Category[] = [
     tagline: "Suela que aguanta cualquier lija",
     description:
       "Zapatillas de skate y urbanas de las marcas que ya conocés, para durar y para lucir.",
-    imageSeed: "calzado-cat-cuyo",
+    image: "/images/categories/calzado.webp",
   },
   {
     slug: "accesorios",
@@ -39,7 +39,7 @@ export const categories: Category[] = [
     tagline: "Los detalles cierran el look",
     description:
       "Gorras, mochilas y anteojos para completar el equipo, arriba y abajo de la tabla.",
-    imageSeed: "accesorios-cat-cuyo",
+    image: "/images/categories/accesorios.webp",
   },
 ];
 

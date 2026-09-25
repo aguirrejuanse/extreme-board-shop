@@ -5,7 +5,7 @@ import { categories } from "@/data/categories";
 import { getFeaturedProducts, getAllBrands } from "@/data/products";
 import CategoryCard from "@/components/category-card";
 import ProductCard from "@/components/product-card";
-import { placeholderImage } from "@/lib/image";
+
 import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -98,7 +98,7 @@ export default function HomePage() {
       <section className="grain diagonal-edge relative overflow-hidden bg-ink-soft pb-24">
         <div className="pointer-events-none absolute inset-0 opacity-25">
           <Image
-            src={placeholderImage("hero-cordillera-cuyo", 1600, 1200)}
+            src="/images/hero.webp"
             alt=""
             fill
             priority

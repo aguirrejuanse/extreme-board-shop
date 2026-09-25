@@ -6,7 +6,6 @@ import { categories, getCategoryBySlug } from "@/data/categories";
 import { getProductBySlug, getProductsByCategory, products } from "@/data/products";
 import { formatPrice } from "@/lib/format";
 import { getInstallmentPlan } from "@/lib/payments";
-import { placeholderImage } from "@/lib/image";
 import { SITE_URL } from "@/lib/site";
 import AddToCartForm from "@/components/add-to-cart-form";
 import ProductCard from "@/components/product-card";
@@ -32,8 +31,6 @@ export async function generateMetadata({
     return { title: "Producto no encontrado" };
   }
 
-  const image = placeholderImage(product.imageSeed, 800, 800, product.name);
-
   return {
     title: `${product.name} — ${product.brand}`,
     description: `${product.shortDescription} ${formatPrice(product.price)} · Envíos a todo el país.`,
@@ -43,7 +40,14 @@ export async function generateMetadata({
     openGraph: {
       title: `${product.name} | ${product.brand}`,
       description: product.shortDescription,
-      images: [{ url: image, width: 800, height: 800, alt: product.name }],
+      images: [
+        {
+          url: `${SITE_URL}${product.image}`,
+          width: 800,
+          height: 800,
+          alt: product.name,
+        },
+      ],
       type: "website",
     },
   };
@@ -101,7 +105,7 @@ export default async function ProductPage({
         category: category.name,
         brand: { "@type": "Brand", name: product.brand },
         description: product.description,
-        image: placeholderImage(product.imageSeed, 800, 800, product.name),
+        image: `${SITE_URL}${product.image}`,
         offers: {
           "@type": "Offer",
           priceCurrency: "ARS",
@@ -170,7 +174,7 @@ export default async function ProductPage({
         <div className="grid grid-cols-2 gap-3">
           <div className="relative col-span-2 aspect-square overflow-hidden rounded-2xl border border-line bg-ink-soft">
             <Image
-              src={placeholderImage(product.imageSeed, 900, 900, product.name)}
+              src={product.image}
               alt={`${product.brand} ${product.name}`}
               fill
               priority
@@ -178,28 +182,20 @@ export default async function ProductPage({
               className="object-cover"
             />
           </div>
+          {/* Zoomed crop of the same photo reads as a "detail" shot until
+              real multi-angle photography exists. */}
           <div className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-ink-soft">
             <Image
-              src={placeholderImage(
-                `${product.imageSeed}-detalle`,
-                500,
-                500,
-                product.name
-              )}
+              src={product.image}
               alt={`Detalle de ${product.name}`}
               fill
               sizes="22vw"
-              className="object-cover"
+              className="scale-[1.6] object-cover"
             />
           </div>
           <div className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-ink-soft">
             <Image
-              src={placeholderImage(
-                `${product.imageSeed}-uso`,
-                500,
-                500,
-                product.name
-              )}
+              src={category.image}
               alt={`${product.name} en uso`}
               fill
               sizes="22vw"

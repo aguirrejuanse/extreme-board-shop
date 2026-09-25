@@ -22,7 +22,7 @@ export default function AddToCartForm({ product }: { product: Product }) {
         name: product.name,
         brand: product.brand,
         price: product.price,
-        imageSeed: product.imageSeed,
+        image: product.image,
         variantId: variant?.id,
         variantLabel: variant?.label,
       },

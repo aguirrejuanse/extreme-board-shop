@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Category } from "@/lib/types";
-import { placeholderImage } from "@/lib/image";
 
 export default function CategoryCard({ category }: { category: Category }) {
   return (
@@ -10,7 +9,7 @@ export default function CategoryCard({ category }: { category: Category }) {
       className="group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-2xl border border-line"
     >
       <Image
-        src={placeholderImage(category.imageSeed, 500, 640)}
+        src={category.image}
         alt={category.name}
         fill
         sizes="(min-width: 1024px) 20vw, 50vw"

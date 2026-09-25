@@ -77,7 +77,10 @@ export default function CartView() {
               className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-line bg-ink sm:h-24 sm:w-24"
             >
               <Image
-                src={placeholderImage(line.imageSeed, 200, 200, line.name)}
+                src={
+                  line.image ??
+                  placeholderImage(line.imageSeed ?? line.slug, 200, 200, line.name)
+                }
                 alt={line.name}
                 fill
                 sizes="96px"

@@ -3,7 +3,6 @@ import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
 import { getInstallmentPlan } from "@/lib/payments";
-import { placeholderImage } from "@/lib/image";
 
 export default function ProductCard({ product }: { product: Product }) {
   const discount = product.compareAtPrice
@@ -17,7 +16,7 @@ export default function ProductCard({ product }: { product: Product }) {
     >
       <div className="relative aspect-square overflow-hidden bg-ink">
         <Image
-          src={placeholderImage(product.imageSeed, 600, 600, product.name)}
+          src={product.image}
           alt={`${product.brand} ${product.name}`}
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"

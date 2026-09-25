@@ -10,7 +10,8 @@ export interface Category {
   name: string;
   tagline: string;
   description: string;
-  imageSeed: string;
+  /** Path under /public — real curated photo, e.g. /images/categories/skate.webp */
+  image: string;
 }
 
 export interface ProductVariant {
@@ -28,7 +29,8 @@ export interface Product {
   compareAtPrice?: number;
   shortDescription: string;
   description: string;
-  imageSeed: string;
+  /** Path under /public — real curated photo, e.g. /images/products/vans-old-skool.webp */
+  image: string;
   variantLabel?: string;
   variants?: ProductVariant[];
   featured?: boolean;
