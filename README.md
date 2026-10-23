@@ -1,7 +1,9 @@
 # Extreme Board Shop
 
-Storefront demo for a board shop — skate, snowboard, apparel and
-footwear catalog with a persistent cart and a simulated checkout flow.
+Storefront demo built for
+[extremeboardshop.com.ar](https://extremeboardshop.com.ar/) — skate,
+snowboard, apparel and footwear catalog with a persistent cart and a
+simulated checkout flow.
 
 **Live demo:** https://extreme-board-shop.vercel.app
 
